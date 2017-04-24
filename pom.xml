@@ -11,6 +11,7 @@
     <description>Small and re-usable modules for building microservices</description>
 
     <modules>
+        <module>springuni-commons</module>
     </modules>
 
     <properties>

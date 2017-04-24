@@ -16,3 +16,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+/**
+ * Common utility classes for developing models with domain-driven design principles.
+ * @see https://github.com/citerus/dddsample-core
+ */
+package com.springuni.commons.domain;

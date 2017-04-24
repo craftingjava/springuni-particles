@@ -23,9 +23,14 @@
     <property name="fileExtensions" value="java, properties, xml"/>
     <!-- Checks for whitespace                               -->
     <!-- See http://checkstyle.sf.net/config_whitespace.html -->
-        <module name="FileTabCharacter">
-            <property name="eachLine" value="true"/>
-        </module>
+    <module name="FileTabCharacter">
+        <property name="eachLine" value="true"/>
+    </module>
+
+    <module name="Header">
+        <property name="headerFile" value="LICENSE.txt"/>
+        <property name="fileExtensions" value="java"/>
+    </module>
 
     <module name="TreeWalker">
         <module name="OuterTypeFilename"/>
