@@ -12,6 +12,8 @@
 
     <modules>
         <module>springuni-commons</module>
+        <module>springuni-user-model</module>
+        <module>springuni-contact-model</module>
     </modules>
 
     <properties>
