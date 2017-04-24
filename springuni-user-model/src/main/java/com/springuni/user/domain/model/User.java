@@ -28,8 +28,8 @@ public class User implements Entity<Long, User> {
   private String passwordSalt;
 
   private Set<String> authorities;
-  private Timezone timezone;
-  private Locale locale;
+  private Timezone timezone = Timezone.AMERICA_LOS_ANGELES;
+  private Locale locale = Locale.US;
 
   private boolean confirmed;
   private boolean locked;
