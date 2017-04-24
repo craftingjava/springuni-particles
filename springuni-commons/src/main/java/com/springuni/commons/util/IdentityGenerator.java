@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  * <a href="https://engineering.instagram.com/sharding-ids-at-instagram-1cf5a71e5a5c">
  * Sharding & IDs at Instagram</a>
  *
- * Going to the most to the least significant bits
+ * <p>Going to the most to the least significant bits
  * <ul>
  * <li>the first bit (sign) is always zero
  * <li>the next 7 bits represent the shard ID
@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  * <li>the next 16 bits represent a serial number XOR-ed with a per-thread random number
  * </ul>
  *
- * With this technique 65536 unique IDs can be generated per shard per millisecond.
+ * <p>With this technique 65536 unique IDs can be generated per shard per millisecond.
  */
 public final class IdentityGenerator {
 
