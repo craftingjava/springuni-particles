@@ -1,9 +1,20 @@
 package com.springuni.user.domain.model;
 
+import java.util.Optional;
+
 /**
  * Created by lcsontos on 4/24/17.
  */
 public interface UserRepository {
+
+  /**
+   * Deletes the given user, provided that it exists.
+   *
+   * @param userId {@link User}'s ID
+   * @throws com.springuni.user.domain.model.exceptions.NoSuchUserException if the user doesn't
+   *     exist
+   */
+  void delete(Long userId);
 
   /**
    * Finds a user based on its ID.
@@ -11,14 +22,22 @@ public interface UserRepository {
    * @param id ID
    * @return a {@link User}
    */
-  User find(Long id);
+  Optional<User> findById(Long id);
 
   /**
-   * Finds a user either by email address or screen name.
-   * @param emailOrScreenName Email address or screen name
+   * Finds a user by email address.
+   *
+   * @param email Email address
    * @return a {@link User}
    */
-  User find(String emailOrScreenName);
+  Optional<User> findByEmail(String email);
+
+  /**
+   * Finds a user by screen name.
+   * @param screenName Screen name
+   * @return a {@link User}
+   */
+  Optional<User> findByScreenName(String screenName);
 
   /**
    * Stores the given user.

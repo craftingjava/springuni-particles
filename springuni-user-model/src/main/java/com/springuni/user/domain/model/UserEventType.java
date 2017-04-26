@@ -1,0 +1,20 @@
+package com.springuni.user.domain.model;
+
+/**
+ * Created by lcsontos on 4/25/17.
+ */
+public enum UserEventType {
+
+  DELETED,
+  EMAIL_CHANGED,
+  EMAIL_CHANGE_REQUESTED,
+  EMAIL_CONFIRMED,
+  PASSWORD_CHANGED,
+  PASSWORD_RESET_CONFIRMED,
+  PASSWORD_RESET_REQUESTED,
+  SCREEN_NAME_CHANGED,
+  SIGNIN_SUCCEEDED,
+  SIGNIN_FAILED,
+  SIGNUP_REQUESTED;
+
+}

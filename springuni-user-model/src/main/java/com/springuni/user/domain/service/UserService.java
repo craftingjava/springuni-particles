@@ -1,7 +1,13 @@
 package com.springuni.user.domain.service;
 
-import com.springuni.user.domain.model.Session;
 import com.springuni.user.domain.model.User;
+import com.springuni.user.domain.model.exceptions.EmailIsAlreadyTakenException;
+import com.springuni.user.domain.model.exceptions.InvalidConfirmationTokenException;
+import com.springuni.user.domain.model.exceptions.InvalidEmailException;
+import com.springuni.user.domain.model.exceptions.NoSuchUserException;
+import com.springuni.user.domain.model.exceptions.ScreenNameIsAlreadyTakenException;
+import com.springuni.user.domain.model.exceptions.UnconfirmedUserException;
+import java.util.Optional;
 
 /**
  * Created by lcsontos on 4/24/17.
@@ -14,12 +20,12 @@ public interface UserService {
    * @param userId {@link User}'s ID
    * @param newEmail new email address
    * @return the modified {@link User}
-   * @throws com.springuni.user.domain.model.exceptions.NoSuchUserException if the user doesn't
-   *     exist
-   * @throws com.springuni.user.domain.model.exceptions.EmailIsAlreadyTakenException if the given
-   *     email is already taken
+   * @throws NoSuchUserException if the user doesn't exist
+   * @throws EmailIsAlreadyTakenException if the given email is already taken
+   * @throws InvalidEmailException if the given {@code email} isn't an email address.
    */
-  User changeEmail(Long userId, String newEmail);
+  User changeEmail(Long userId, String newEmail)
+      throws EmailIsAlreadyTakenException, InvalidEmailException, NoSuchUserException;
 
   /**
    * Changes the {@link User}'s password.
@@ -27,23 +33,21 @@ public interface UserService {
    * @param userId {@link User}'s ID
    * @param rawPassword new (cleartext) password
    * @return the modified {@link User}
-   * @throws com.springuni.user.domain.model.exceptions.NoSuchUserException if the user doesn't
-   *     exist
+   * @throws NoSuchUserException if the user doesn't exist
    */
-  User changePassword(Long userId, String rawPassword);
+  User changePassword(Long userId, String rawPassword) throws NoSuchUserException;
 
   /**
-   * Changes the {@link User}'s email address, provided that {@code newEmail} is available.
+   * Changes the {@link User}'s screen name, provided that {@code newScreenName} is available.
    *
    * @param userId {@link User}'s ID
-   * @param screenName new screen name
+   * @param newScreenName new screen name
    * @return the modified {@link User}
-   * @throws com.springuni.user.domain.model.exceptions.NoSuchUserException if the user doesn't
-   *     exist
-   * @throws com.springuni.user.domain.model.exceptions.ScreenNameIsAlreadyTakenException if the
-   *     given email is already taken
+   * @throws NoSuchUserException if the user doesn't exist
+   * @throws ScreenNameIsAlreadyTakenException if the given email is already taken
    */
-  User changeScreenName(Long userId, String screenName);
+  User changeScreenName(Long userId, String newScreenName)
+      throws NoSuchUserException, ScreenNameIsAlreadyTakenException;
 
   /**
    * Confirms the {@link User}'s email address with the given token, provided that it's valid.
@@ -51,12 +55,11 @@ public interface UserService {
    * @param userId {@link User}'s ID
    * @param token confirmation token
    * @return the modified {@link User}
-   * @throws com.springuni.user.domain.model.exceptions.NoSuchUserException if the user doesn't
-   *     exist
-   * @throws com.springuni.user.domain.model.exceptions.InvalidConfirmationTokenException if the
-   *     given confirmation token is invalid
+   * @throws NoSuchUserException if the user doesn't exist
+   * @throws InvalidConfirmationTokenException if the given confirmation token is invalid
    */
-  User confirmEmail(Long userId, String token);
+  User confirmEmail(Long userId, String token)
+      throws InvalidConfirmationTokenException, NoSuchUserException;
 
   /**
    * Confirms the {@link User}'s previously requested password reset.
@@ -64,54 +67,53 @@ public interface UserService {
    * @param userId {@link User}'s ID
    * @param token confirmation token
    * @return the modified {@link User}
-   * @throws com.springuni.user.domain.model.exceptions.NoSuchUserException if the user doesn't
-   *     exist
-   * @throws com.springuni.user.domain.model.exceptions.InvalidConfirmationTokenException if the
-   *     given confirmation token is invalid
+   * @throws NoSuchUserException if the user doesn't exist
+   * @throws InvalidConfirmationTokenException if the given confirmation token is invalid
    */
-  User confirmPasswordReset(Long userId, String token);
+  User confirmPasswordReset(Long userId, String token)
+      throws InvalidConfirmationTokenException, NoSuchUserException;
 
   /**
    * Deletes the given {@link User}.
    *
    * @param userId {@link User}'s ID
-   * @throws com.springuni.user.domain.model.exceptions.NoSuchUserException if the user doesn't
-   *     exist
+   * @throws NoSuchUserException if the user doesn't exist
    */
-  void delete(Long userId);
-
-  /**
-   * Checks if such a {@link User} exists in the system with the given email or screen name.
-   *
-   * @param emailOrScreenName Email or screen name
-   * @return the {@link User}'s ID if exists
-   * @throws com.springuni.user.domain.model.exceptions.NoSuchUserException if the user doesn't
-   *     exist
-   */
-  Long exists(String emailOrScreenName);
+  void delete(Long userId) throws NoSuchUserException;
 
   /**
    * Finds a {@link User} in the system by its ID.
    *
    * @param userId Email or screen name
-   * @return the {@link User}'s ID if exists, null otherwise
+   * @return the {@link User} if exists, null otherwise
    */
-  User findUser(Long userId);
+  Optional<User> findUser(Long userId);
 
   /**
    * Finds a {@link User} in the system by its ID.
    *
    * @param emailOrScreenName Email or screen name
-   * @return the {@link User}'s ID if exists, null otherwise
+   * @return the {@link User} if exists, null otherwise
    */
-  User findUser(String emailOrScreenName);
+  Optional<User> findUser(String emailOrScreenName);
 
   /**
-   * Returns the currently authenticated {@link User}.
+   * Finds a {@link User} in the system by its ID.
    *
-   * @return Authenticted {@link User}
+   * @param userId Email or screen name
+   * @return the {@link User}'s ID if exists
+   * @throws NoSuchUserException if the user doesn't exist
    */
-  User getAuthenticatedUser();
+  User getUser(Long userId) throws NoSuchUserException;
+
+  /**
+   * Finds a {@link User} in the system by its ID.
+   *
+   * @param emailOrScreenName Email or screen name
+   * @return the {@link User}'s ID if exists
+   * @throws NoSuchUserException if the user doesn't exist
+   */
+  User getUser(String emailOrScreenName) throws NoSuchUserException;
 
   /**
    * Checks if the given {@code email} is taken.
@@ -130,56 +132,49 @@ public interface UserService {
   boolean isScreenNameTaken(String screenName);
 
   /**
+   * Logs a user in with the given {@code emailOrScreenName} and {@code password}.
+   *
+   * @param emailOrScreenName Email or screen name
+   * @param password password
+   * @return the {@link User} if it exists and its password matches
+   */
+  User login(String emailOrScreenName, String password)
+      throws NoSuchUserException, UnconfirmedUserException;
+
+  /**
    * Returns the next available screen name based on the given email address.
    *
    * @param email Email
    * @return an available screen name.
+   * @throws InvalidEmailException if the given {@code email} isn't an email address.
    */
-  String nextScreenName(String email);
+  String nextScreenName(String email) throws InvalidEmailException;
 
   /**
    * Request email change for the given user.
    *
    * @param userId {@link User}'s ID
    * @param newEmail new email
-   * @throws com.springuni.user.domain.model.exceptions.NoSuchUserException if the user doesn't
-   *     exist
+   * @throws NoSuchUserException if the user doesn't exist
    */
-  void requestEmailChange(Long userId, String newEmail);
+  void requestEmailChange(Long userId, String newEmail)
+      throws InvalidEmailException, EmailIsAlreadyTakenException, NoSuchUserException;
 
   /**
    * Request password reset for the given {@link User}
    *
    * @param userId {@link User}'s ID
-   * @throws com.springuni.user.domain.model.exceptions.NoSuchUserException if the user doesn't
-   *     exist
+   * @throws NoSuchUserException if the user doesn't exist
    */
-  void requestPasswordReset(Long userId);
-
-  /**
-   * Signs a user in with the given {@code emailOrScreenName} and {@code password}.
-   *
-   * @param emailOrScreenName Email or screen name
-   * @param password password
-   * @return the user's {@link Session}
-   */
-  Session signin(String emailOrScreenName, String password);
-
-  /**
-   * Signs the user's session out.
-   *
-   * @param sessionId Session ID
-   * @throws com.springuni.user.domain.model.exceptions.NoSuchSessionException if the user's session
-   *     doesn't exist or if it has already expired.
-   */
-  void signout(String sessionId);
+  void requestPasswordReset(Long userId) throws NoSuchUserException;
 
   /**
    * Signs a user up.
    *
    * @param user a {@link User}
+   * @param rawPassword {@link User}'s cleartext password
    */
-  void signup(User user);
+  void signup(User user, String rawPassword) throws InvalidEmailException;
 
   /**
    * Stores the given {@link User}.
@@ -187,6 +182,7 @@ public interface UserService {
    * @param user a {@link User} to store
    * @return the stored user
    */
-  User store(User user);
+  User store(User user)
+      throws InvalidEmailException, EmailIsAlreadyTakenException, ScreenNameIsAlreadyTakenException;
 
 }

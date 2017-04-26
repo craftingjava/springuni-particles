@@ -1,6 +1,9 @@
 package com.springuni.user.domain.model;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import lombok.Getter;
 
 /**
@@ -9,8 +12,6 @@ import lombok.Getter;
 @Getter
 public enum Timezone {
 
-  ACT("ACT"),
-  AET("AET"),
   AFRICA_ABIDJAN("Africa/Abidjan"),
   AFRICA_ACCRA("Africa/Accra"),
   AFRICA_ADDIS_ABABA("Africa/Addis_Ababa"),
@@ -63,7 +64,6 @@ public enum Timezone {
   AFRICA_TRIPOLI("Africa/Tripoli"),
   AFRICA_TUNIS("Africa/Tunis"),
   AFRICA_WINDHOEK("Africa/Windhoek"),
-  AGT("AGT"),
   AMERICA_ADAK("America/Adak"),
   AMERICA_ANCHORAGE("America/Anchorage"),
   AMERICA_ANGUILLA("America/Anguilla"),
@@ -200,7 +200,6 @@ public enum Timezone {
   ANTARCTICA_SYOWA("Antarctica/Syowa"),
   ANTARCTICA_VOSTOK("Antarctica/Vostok"),
   ARCTIC_LONGYEARBYEN("Arctic/Longyearbyen"),
-  ART("ART"),
   ASIA_ADEN("Asia/Aden"),
   ASIA_ALMATY("Asia/Almaty"),
   ASIA_AMMAN("Asia/Amman"),
@@ -262,9 +261,6 @@ public enum Timezone {
   ASIA_QYZYLORDA("Asia/Qyzylorda"),
   ASIA_RANGOON("Asia/Rangoon"),
   ASIA_RIYADH("Asia/Riyadh"),
-  ASIA_RIYADH87("Asia/Riyadh87"),
-  ASIA_RIYADH88("Asia/Riyadh88"),
-  ASIA_RIYADH89("Asia/Riyadh89"),
   ASIA_SAIGON("Asia/Saigon"),
   ASIA_SAKHALIN("Asia/Sakhalin"),
   ASIA_SAMARKAND("Asia/Samarkand"),
@@ -288,7 +284,6 @@ public enum Timezone {
   ASIA_YAKUTSK("Asia/Yakutsk"),
   ASIA_YEKATERINBURG("Asia/Yekaterinburg"),
   ASIA_YEREVAN("Asia/Yerevan"),
-  AST("AST"),
   ATLANTIC_AZORES("Atlantic/Azores"),
   ATLANTIC_BERMUDA("Atlantic/Bermuda"),
   ATLANTIC_CANARY("Atlantic/Canary"),
@@ -321,12 +316,10 @@ public enum Timezone {
   AUSTRALIA_VICTORIA("Australia/Victoria"),
   AUSTRALIA_WEST("Australia/West"),
   AUSTRALIA_YANCOWINNA("Australia/Yancowinna"),
-  BET("BET"),
   BRAZIL_ACRE("Brazil/Acre"),
   BRAZIL_DENORONHA("Brazil/DeNoronha"),
   BRAZIL_EAST("Brazil/East"),
   BRAZIL_WEST("Brazil/West"),
-  BST("BST"),
   CANADA_ATLANTIC("Canada/Atlantic"),
   CANADA_CENTRAL("Canada/Central"),
   CANADA_EAST_SASKATCHEWAN("Canada/East-Saskatchewan"),
@@ -336,21 +329,12 @@ public enum Timezone {
   CANADA_PACIFIC("Canada/Pacific"),
   CANADA_SASKATCHEWAN("Canada/Saskatchewan"),
   CANADA_YUKON("Canada/Yukon"),
-  CAT("CAT"),
-  CET("CET"),
   CHILE_CONTINENTAL("Chile/Continental"),
   CHILE_EASTERISLAND("Chile/EasterIsland"),
-  CNT("CNT"),
-  CST("CST"),
   CST6CDT("CST6CDT"),
-  CTT("CTT"),
   CUBA("Cuba"),
-  EAT("EAT"),
-  ECT("ECT"),
-  EET("EET"),
   EGYPT("Egypt"),
   EIRE("Eire"),
-  EST("EST"),
   EST5EDT("EST5EDT"),
   ETC_GMT("Etc/GMT"),
   ETC_GMT_PLUS_0("Etc/GMT+0"),
@@ -445,9 +429,7 @@ public enum Timezone {
   GMT0("GMT0"),
   GREENWICH("Greenwich"),
   HONGKONG("Hongkong"),
-  HST("HST"),
   ICELAND("Iceland"),
-  IET("IET"),
   INDIAN_ANTANANARIVO("Indian/Antananarivo"),
   INDIAN_CHAGOS("Indian/Chagos"),
   INDIAN_CHRISTMAS("Indian/Christmas"),
@@ -461,25 +443,15 @@ public enum Timezone {
   INDIAN_REUNION("Indian/Reunion"),
   IRAN("Iran"),
   ISRAEL("Israel"),
-  IST("IST"),
   JAMAICA("Jamaica"),
   JAPAN("Japan"),
-  JST("JST"),
   KWAJALEIN("Kwajalein"),
   LIBYA("Libya"),
-  MET("MET"),
   MEXICO_BAJANORTE("Mexico/BajaNorte"),
   MEXICO_BAJASUR("Mexico/BajaSur"),
   MEXICO_GENERAL("Mexico/General"),
-  MIDEAST_RIYADH87("Mideast/Riyadh87"),
-  MIDEAST_RIYADH88("Mideast/Riyadh88"),
-  MIDEAST_RIYADH89("Mideast/Riyadh89"),
-  MIT("MIT"),
-  MST("MST"),
   MST7MDT("MST7MDT"),
   NAVAJO("Navajo"),
-  NET("NET"),
-  NST("NST"),
   NZ("NZ"),
   NZ_CHAT("NZ-CHAT"),
   PACIFIC_APIA("Pacific/Apia"),
@@ -522,17 +494,12 @@ public enum Timezone {
   PACIFIC_WAKE("Pacific/Wake"),
   PACIFIC_WALLIS("Pacific/Wallis"),
   PACIFIC_YAP("Pacific/Yap"),
-  PLT("PLT"),
-  PNT("PNT"),
   POLAND("Poland"),
   PORTUGAL("Portugal"),
   PRC("PRC"),
-  PRT("PRT"),
-  PST("PST"),
   PST8PDT("PST8PDT"),
   ROK("ROK"),
   SINGAPORE("Singapore"),
-  SST("SST"),
   SYSTEMV_AST4("SystemV/AST4"),
   SYSTEMV_AST4ADT("SystemV/AST4ADT"),
   SYSTEMV_CST6("SystemV/CST6"),
@@ -563,17 +530,16 @@ public enum Timezone {
   US_PACIFIC_NEW("US/Pacific-New"),
   US_SAMOA("US/Samoa"),
   UTC("UTC"),
-  VST("VST"),
   W_SU("W-SU"),
   WET("WET"),
   ZULU("Zulu");
 
-  private final String zoneId;
-  private final ZoneOffset zoneOffset;
+  private final String zoneName;
+  private final ZoneId zoneId;
 
-  Timezone(String zoneId) {
-    this.zoneId = zoneId;
-    this.zoneOffset = ZoneOffset.of(zoneId);
+  Timezone(String zoneName) {
+    this.zoneName = zoneName;
+    this.zoneId = ZoneId.of(zoneName);
   }
 
 }

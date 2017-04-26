@@ -5,7 +5,10 @@ import static java.time.temporal.ChronoUnit.MINUTES;
 
 import com.springuni.commons.domain.AuditData;
 import com.springuni.commons.domain.Entity;
+import com.springuni.commons.util.DateTimeUtil;
 import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,23 +16,26 @@ import lombok.Setter;
 
 /**
  * This is a general template for adding various kinds of {@link ConfirmationToken}s to the systems.
- *
- * @see {@link EmailChangeConfirmationToken}
- * @see {@link PasswordResetConfirmationToken}
  */
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "value")
 @NoArgsConstructor
-public abstract class ConfirmationToken<C extends ConfirmationToken<C>>
-    implements Entity<Long, C> {
+public class ConfirmationToken<P> implements Entity<Long, ConfirmationToken<P>> {
+
+  public static final int DEFAULT_EXPIRATION_MINUTES = 10;
 
   private Long id;
-  private User owner;
+
   private String value;
+  private User owner;
+  private ConfirmationTokenType type;
 
   private boolean valid = true;
   private LocalDateTime expiresAt;
+  private LocalDateTime usedAt;
+
+  private P payload;
 
   private AuditData<User> auditData;
 
@@ -37,23 +43,79 @@ public abstract class ConfirmationToken<C extends ConfirmationToken<C>>
    * Creates a new confirmation token with the given {@link User} and expiration period.
    *
    * @param owner a {@link User}
-   * @param minutes expiration in minutes
+   * @param type confirmation token's type
    */
-  public ConfirmationToken(User owner, int minutes) {
-    this.owner = owner;
-    expiresAt = expireNowUtc(minutes, MINUTES);
+  public ConfirmationToken(User owner, ConfirmationTokenType type) {
+    // FIXME: Use a bit more sophisticated random token value generaton later
+    this(owner, type, DEFAULT_EXPIRATION_MINUTES);
   }
 
   /**
-   * Returns the type of this token; should be implement by sub-classes.
+   * Creates a new confirmation token with the given {@link User} and expiration period.
    *
-   * @return type of this token
+   * @param owner a {@link User}
+   * @param type confirmation token's type
+   * @param minutes expiration in minutes
    */
-  public abstract ConfirmationTokenType getConfirmationTokenType();
+  public ConfirmationToken(User owner, ConfirmationTokenType type, int minutes) {
+    // FIXME: Use a bit more sophisticated random token value generaton later
+    this(owner, UUID.randomUUID().toString(), type, minutes);
+  }
+
+  /**
+   * Creates a new confirmation token with the given {@link User} and expiration period.
+   *
+   * @param owner a {@link User}
+   * @param value tokens's value
+   * @param type confirmation token's type
+   */
+  public ConfirmationToken(User owner, String value, ConfirmationTokenType type) {
+    this(owner, value, type, DEFAULT_EXPIRATION_MINUTES, null);
+  }
+
+  /**
+   * Creates a new confirmation token with the given {@link User} and expiration period.
+   *
+   * @param owner a {@link User}
+   * @param value tokens's value
+   * @param type confirmation token's type
+   * @param minutes expiration in minutes
+   */
+  public ConfirmationToken(User owner, String value, ConfirmationTokenType type, int minutes) {
+    this(owner, value, type, minutes, null);
+  }
+
+  /**
+   * Creates a new confirmation token with the given {@link User} and expiration period.
+   *
+   * @param owner a {@link User}
+   * @param value tokens's value
+   * @param type confirmation token's type
+   * @param minutes expiration in minutes
+   */
+  public ConfirmationToken(
+      User owner, String value, ConfirmationTokenType type, int minutes, P payload) {
+
+    this.value = value;
+    this.owner = owner;
+    this.type = type;
+    this.payload = payload;
+
+    expiresAt = expireNowUtc(minutes, MINUTES);
+  }
 
   @Override
   public Long getId() {
     return id;
+  }
+
+  /**
+   * Gets the token's payload if any.
+   *
+   * @return token's payload.
+   */
+  public Optional<P> getPayload() {
+    return Optional.ofNullable(payload);
   }
 
   @Override
@@ -62,8 +124,19 @@ public abstract class ConfirmationToken<C extends ConfirmationToken<C>>
   }
 
   @Override
-  public boolean sameIdentityAs(C other) {
+  public boolean sameIdentityAs(ConfirmationToken<P> other) {
     return equals(other);
+  }
+
+  /**
+   * Use the confirmation token.
+   *
+   * @return this confirmation token.
+   */
+  public ConfirmationToken use() {
+    valid = false;
+    usedAt = DateTimeUtil.nowUtc();
+    return this;
   }
 
 }
