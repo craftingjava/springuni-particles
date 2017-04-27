@@ -17,47 +17,38 @@
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.springuni.commons.domain;
+package com.springuni.auth.domain.model.session;
+
+import com.springuni.auth.domain.model.session.exceptions.NoSuchSessionException;
+import java.util.Optional;
 
 /**
- * An entity, as explained in the DDD book.
+ * Repository for managing the lifecycle of {@link Session} entities.
  */
-public interface Entity<I, E> {
+public interface SessionRepository {
 
   /**
-   * Entities compare by identity, not by attributes.
+   * Deletes the given user, provided that it exists.
    *
-   * @param other The other entity.
-   * @return true if the identities are the same, regardles of other attributes.
+   * @param sessionId {@link Session}'s ID
+   * @throws NoSuchSessionException if the user doesn't exist
    */
-  boolean sameIdentityAs(E other);
+  void delete(Long sessionId) throws NoSuchSessionException;
 
   /**
-   * Gets the entity's unique ID.
+   * Finds a session based on its ID.
    *
-   * @return ID
+   * @param sessionId ID
+   * @return a {@link Session}
    */
-  I getId();
+  Optional<Session> findById(Long sessionId);
 
   /**
-   * Sets the entity's unique ID.
+   * Stores the given session.
    *
-   * @param id ID
+   * @param session a {@link Session}
+   * @return the stored {@link Session}
    */
-  default void setId(I id) {
-  }
-
-  /**
-   * Checks if {@code this} is a new entity or it isn't. An entity is new if it hasn't been an
-   * identity assigned to.
-   *
-   * @return {@code true} if this is new entity, {@code false} otherwise
-   */
-  default boolean isNew() {
-    if (getId() == null) {
-      return true;
-    }
-    return false;
-  }
+  Session save(Session session);
 
 }

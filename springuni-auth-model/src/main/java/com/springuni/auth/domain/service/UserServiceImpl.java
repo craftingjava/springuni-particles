@@ -34,8 +34,6 @@ import static com.springuni.auth.domain.model.user.UserEventType.SIGNUP_REQUESTE
 
 import com.springuni.auth.crypto.PasswordChecker;
 import com.springuni.auth.crypto.PasswordEncryptor;
-import com.springuni.commons.util.IdentityGenerator;
-import com.springuni.commons.util.Validator;
 import com.springuni.auth.domain.model.user.ConfirmationToken;
 import com.springuni.auth.domain.model.user.Password;
 import com.springuni.auth.domain.model.user.User;
@@ -47,6 +45,8 @@ import com.springuni.auth.domain.model.user.exceptions.InvalidEmailException;
 import com.springuni.auth.domain.model.user.exceptions.NoSuchUserException;
 import com.springuni.auth.domain.model.user.exceptions.ScreenNameIsAlreadyTakenException;
 import com.springuni.auth.domain.model.user.exceptions.UnconfirmedUserException;
+import com.springuni.commons.util.IdentityGenerator;
+import com.springuni.commons.util.Validator;
 import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;

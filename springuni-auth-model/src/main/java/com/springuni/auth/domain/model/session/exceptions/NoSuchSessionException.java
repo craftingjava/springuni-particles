@@ -17,10 +17,10 @@
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.springuni.auth.domain.model.user.exceptions;
+package com.springuni.auth.domain.model.session.exceptions;
 
 /**
- * Thrown when the given session doesn't exist.
+ * Thrown when a session doesn't exist or expired.
  */
 public class NoSuchSessionException extends Exception {
 }

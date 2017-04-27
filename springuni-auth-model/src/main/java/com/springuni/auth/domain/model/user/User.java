@@ -19,10 +19,10 @@
 
 package com.springuni.auth.domain.model.user;
 
+import com.springuni.auth.domain.model.user.exceptions.InvalidConfirmationTokenException;
 import com.springuni.commons.domain.AuditData;
 import com.springuni.commons.domain.Entity;
 import com.springuni.crm.domain.contact.ContactData;
-import com.springuni.auth.domain.model.user.exceptions.InvalidConfirmationTokenException;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Optional;
