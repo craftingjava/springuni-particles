@@ -11,9 +11,9 @@
     <description>Small and re-usable modules for building microservices</description>
 
     <modules>
+        <module>springuni-auth-model</module>
         <module>springuni-commons</module>
         <module>springuni-crm-model</module>
-        <module>springuni-user-model</module>
     </modules>
 
     <properties>
