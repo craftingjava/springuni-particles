@@ -11,7 +11,7 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>springuni-user-model</artifactId>
+  <artifactId>springuni-auth-model</artifactId>
 
   <name>SpringUni Auth Model</name>
   <description>Classes for modelling authentication and authorization of users</description>
