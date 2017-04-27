@@ -17,10 +17,11 @@
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.springuni.auth.domain.model.user;
+package com.springuni.auth.domain.model.session;
 
 import static java.time.temporal.ChronoUnit.HOURS;
 
+import com.springuni.auth.domain.model.user.User;
 import com.springuni.commons.domain.ValueObject;
 import com.springuni.commons.util.DateTimeUtil;
 import java.time.LocalDateTime;
