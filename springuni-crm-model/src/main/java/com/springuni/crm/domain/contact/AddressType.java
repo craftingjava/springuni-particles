@@ -17,7 +17,7 @@
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.springuni.contact.domain.model;
+package com.springuni.crm.domain.contact;
 
 /**
  * Represents the type of an {@link AddressData}.

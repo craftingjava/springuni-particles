@@ -11,9 +11,9 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>springuni-contact-model</artifactId>
+  <artifactId>springuni-crm-model</artifactId>
 
-  <name>SpringUni Contact Model</name>
+  <name>SpringUni CRM Model</name>
   <description>Classes for modelling contacts</description>
 
   <dependencies>

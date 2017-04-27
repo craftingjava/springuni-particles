@@ -17,33 +17,27 @@
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.springuni.contact.domain.model;
-
-import com.springuni.commons.domain.ValueObject;
-import java.time.LocalDate;
-import java.util.Set;
-import lombok.Data;
+package com.springuni.crm.domain.contact;
 
 /**
- * Represents a contact.
+ * This enum represents genders with that option if it's not known of if someone would rather not
+ *     state it.
  */
-@Data
-public class ContactData implements ValueObject<ContactData> {
+public enum Gender {
 
-  private String email;
+  /**
+   * Female.
+   */
+  FEMALE,
 
-  private String firstName;
-  private String lastName;
+  /**
+   * Male.
+   */
+  MALE,
 
-  private Set<AddressData> addresses;
-
-  private Gender gender;
-
-  private LocalDate birthday;
-
-  @Override
-  public boolean sameValueAs(ContactData other) {
-    return equals(other);
-  }
+  /**
+   * Unkown.
+   */
+  UNKNOWN;
 
 }

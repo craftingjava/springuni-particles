@@ -21,7 +21,7 @@ package com.springuni.user.domain.model;
 
 import com.springuni.commons.domain.AuditData;
 import com.springuni.commons.domain.Entity;
-import com.springuni.contact.domain.model.ContactData;
+import com.springuni.crm.domain.contact.ContactData;
 import com.springuni.user.domain.model.exceptions.InvalidConfirmationTokenException;
 import java.util.LinkedHashSet;
 import java.util.Locale;
