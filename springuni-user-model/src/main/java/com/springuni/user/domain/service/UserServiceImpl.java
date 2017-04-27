@@ -1,3 +1,22 @@
+/**
+ * Copyright (c) 2017-present Laszlo Csontos All rights reserved.
+ *
+ * This file is part of springuni-particles.
+ *
+ * springuni-particles is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * springuni-particles is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.springuni.user.domain.service;
 
 import static com.springuni.user.domain.model.ConfirmationTokenType.PASSWORD_RESET;
@@ -32,7 +51,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by lcsontos on 4/24/17.
+ * Framework agnostic implementation of {@link UserService}.
  */
 public class UserServiceImpl implements UserService {
 
@@ -46,10 +65,19 @@ public class UserServiceImpl implements UserService {
   private final UserEventEmitter userEventEmitter;
   private final UserRepository userRepository;
 
+  /**
+   * Creates an instance of {@link UserServiceImpl}, injecting its dependencies.
+   *
+   * @param passwordChecker a concrete implementation of {@link PasswordChecker}
+   * @param passwordEncryptor a concrete implementation of {@link PasswordEncryptor}
+   * @param userEventEmitter a concrete implementation of {@link UserEventEmitter}
+   * @param userRepository a concrete implementation of {@link UserRepository}
+   */
   public UserServiceImpl(
       PasswordChecker passwordChecker, PasswordEncryptor passwordEncryptor,
       UserEventEmitter userEventEmitter, UserRepository userRepository) {
 
+    // TODO: null check.
     this.passwordChecker = passwordChecker;
     this.passwordEncryptor = passwordEncryptor;
     this.userEventEmitter = userEventEmitter;
@@ -219,6 +247,7 @@ public class UserServiceImpl implements UserService {
     }
 
     if (passwordChecker.check(user.getPassword(), rawPassword)) {
+      // TODO: invalid all password reset tokens.
       userEventEmitter.emit(new UserEvent(user.getId(), SIGNIN_SUCCEEDED));
       return user;
     }
