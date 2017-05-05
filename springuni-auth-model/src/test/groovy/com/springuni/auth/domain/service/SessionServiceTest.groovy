@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when
 /**
  * Created by lcsontos on 4/27/17.
  */
-@RunWith(MockitoJUnitRunner)
+@RunWith(MockitoJUnitRunner.Silent)
 class SessionServiceTest {
 
   static final LocalDateTime ISSUED_AT = LocalDateTime.parse("2017-04-01T10:15:30")
@@ -38,10 +38,10 @@ class SessionServiceTest {
 
     sessionService = new SessionServiceImpl(sessionRepository)
 
-    when(sessionRepository.findById(validSession.id)).thenReturn(validSession)
+    when(sessionRepository.findById(validSession.id)).thenReturn(Optional.of(validSession))
     when(sessionRepository.save(validSession)).thenReturn(validSession)
 
-    when(sessionRepository.findById(expiredSession.id)).thenReturn(expiredSession)
+    when(sessionRepository.findById(expiredSession.id)).thenReturn(Optional.of(validSession))
     when(sessionRepository.save(expiredSession)).thenReturn(expiredSession)
 
     when(sessionRepository.findById(NON_EXISTENT_SESSION_ID)).thenReturn(Optional.empty())
