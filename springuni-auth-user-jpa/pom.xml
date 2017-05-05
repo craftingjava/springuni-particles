@@ -11,10 +11,10 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>springuni-auth-user-jdbc</artifactId>
+  <artifactId>springuni-auth-user-jpa</artifactId>
 
-  <name>SpringUni Auth User JDBC</name>
-  <description>Support module for storing users in RDBMS</description>
+  <name>SpringUni Auth User JPA</name>
+  <description>Support module for storing users in RDBMS via JPA</description>
 
   <dependencies>
     <dependency>
