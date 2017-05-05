@@ -17,36 +17,34 @@
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.springuni.auth.domain.model.user;
+package com.springuni.jpa;
 
-import com.springuni.commons.domain.ValueObject;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.springuni.commons.domain.Entity;
+import com.springuni.commons.util.IdentityGenerator;
+import javax.persistence.PrePersist;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Represents {@link User}s' password.
+ * Created by lcsontos on 5/5/17.
  */
-@Data
-@NoArgsConstructor
-public class Password implements ValueObject<Password> {
+public class IdentityGeneratorListener {
 
-  private String passwordHash;
-  private String passwordSalt;
+  private static final Logger LOGGER = LoggerFactory.getLogger(IdentityGeneratorListener.class);
+
 
   /**
-   * Create a new password.
-   *
-   * @param passwordHash password hash
-   * @param passwordSalt password salt
+   * Generates a new identity for the given {@link Entity}.
+   * @param entity Entity
    */
-  public Password(String passwordHash, String passwordSalt) {
-    this.passwordHash = passwordHash;
-    this.passwordSalt = passwordSalt;
-  }
-
-  @Override
-  public boolean sameValueAs(Password other) {
-    return equals(other);
+  @PrePersist
+  public void generate(Entity<Long, ?> entity) {
+    if (!entity.isNew()) {
+      return;
+    }
+    long id = IdentityGenerator.generate();
+    entity.setId(id);
+    LOGGER.debug("Generated ID {} for {}.", id, entity.getClass());
   }
 
 }

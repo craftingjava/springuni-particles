@@ -7,6 +7,9 @@
   <!-- ConfirmationToken -->
   <entity class="com.springuni.auth.domain.model.user.ConfirmationToken" cacheable="true"
     metadata-complete="true">
+    <entity-listeners>
+      <entity-listener class="com.springuni.jpa.IdentityGeneratorListener"/>
+    </entity-listeners>
     <attributes>
       <id name="id"/>
       <basic name="value"/>
@@ -29,6 +32,15 @@
   <entity class="com.springuni.auth.domain.model.user.User" cacheable="true"
     metadata-complete="true">
     <table name="user_"/>
+    <named-query name="findByIdQuery">
+      <query>
+        <![CDATA[
+          select u from User u
+          where u.id = :userId
+          and u.deleted = false
+        ]]>
+      </query>
+    </named-query>
     <named-query name="findByEmailQuery">
       <query>
         <![CDATA[
@@ -47,6 +59,9 @@
         ]]>
       </query>
     </named-query>
+    <entity-listeners>
+      <entity-listener class="com.springuni.jpa.IdentityGeneratorListener"/>
+    </entity-listeners>
     <attributes>
       <id name="id"/>
       <basic name="timezone">
@@ -67,14 +82,11 @@
           <join-column name="user_id"/>
         </collection-table>
       </element-collection>
-      <element-collection name="confirmationTokens">
-        <collection-table name="confirmation_token">
-          <join-column name="user_id"/>
-        </collection-table>
-      </element-collection>
       <embedded name="auditData"/>
       <embedded name="contactData"/>
       <embedded name="password"/>
+      <!-- Do not map email directly through its getter/setter -->
+      <transient name="email"/>
     </attributes>
   </entity>
 
@@ -101,8 +113,12 @@
     <attributes>
       <basic name="createdAt"/>
       <basic name="modifiedAt"/>
-      <many-to-one name="createdBy"/>
-      <many-to-one name="modifiedBy"/>
+      <many-to-one name="createdBy">
+        <join-column name="created_by"/>
+      </many-to-one>
+      <many-to-one name="modifiedBy">
+        <join-column name="modified_by"/>
+      </many-to-one>
     </attributes>
   </embeddable>
 
@@ -131,4 +147,5 @@
       <basic name="passwordSalt"/>
     </attributes>
   </embeddable>
+
 </entity-mappings>

@@ -19,12 +19,19 @@
 
 package com.springuni.auth.domain.model.user;
 
+import static com.springuni.commons.util.Maps.entry;
+import static com.springuni.commons.util.Maps.entriesToMap;
+
 import com.springuni.auth.domain.model.user.exceptions.NoSuchUserException;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +41,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Repository
 public class UserJpaRepositoryImpl implements UserRepository {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserJpaRepositoryImpl.class);
 
   @PersistenceContext
   private EntityManager entityManager;
@@ -49,25 +58,22 @@ public class UserJpaRepositoryImpl implements UserRepository {
   @Override
   @Transactional(readOnly = true)
   public Optional<User> findById(Long userId) {
-    return Optional.ofNullable(entityManager.find(User.class, userId));
+    Map parameters = Stream.of(entry("userId", userId)).collect(entriesToMap());
+    return doFindUser("findByIdQuery", parameters);
   }
 
   @Override
   @Transactional(readOnly = true)
   public Optional<User> findByEmail(String email) {
-    TypedQuery<User> findByEmailQuery =
-        entityManager.createNamedQuery("findByEmailQuery", User.class);
-    findByEmailQuery.setParameter("email", email);
-    return doFindUser(findByEmailQuery);
+    Map parameters = Stream.of(entry("email", email)).collect(entriesToMap());
+    return doFindUser("findByEmailQuery", parameters);
   }
 
   @Override
   @Transactional(readOnly = true)
   public Optional<User> findByScreenName(String screenName) {
-    TypedQuery<User> findByScreenNameQuery =
-        entityManager.createNamedQuery("findByScreenNameQuery", User.class);
-    findByScreenNameQuery.setParameter("screenName", screenName);
-    return doFindUser(findByScreenNameQuery);
+    Map parameters = Stream.of(entry("screenName", screenName)).collect(entriesToMap());
+    return doFindUser("findByScreenNameQuery", parameters);
   }
 
   @Override
@@ -80,10 +86,13 @@ public class UserJpaRepositoryImpl implements UserRepository {
     return user;
   }
 
-  Optional<User> doFindUser(TypedQuery<User> userQuery) {
+  Optional<User> doFindUser(String queryName, Map<String, ?> parameters) {
+    TypedQuery<User> userQuery = entityManager.createNamedQuery(queryName, User.class);
+    parameters.forEach(userQuery::setParameter);
     try {
       return Optional.of(userQuery.getSingleResult());
     } catch (NoResultException nre) {
+      LOGGER.debug(nre.getMessage(), nre);
       return Optional.empty();
     }
   }

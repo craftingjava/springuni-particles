@@ -1,5 +1,8 @@
+import com.springuni.auth.domain.model.user.ConfirmationTokenType
+import com.springuni.auth.domain.model.user.User
 import com.springuni.auth.domain.model.user.UserRepository
 import com.springuni.jpa.JpaConfig
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,9 +25,36 @@ class UserJpaRepositoryTest {
   @Autowired
   UserRepository userRepository
 
+  User user
+
+  @Before
+  void before() {
+    user = new User(1, "test", "test@springuni.com")
+    user.addConfirmationToken(ConfirmationTokenType.EMAIL, 10)
+    userRepository.save(user)
+  }
+
   @Test
-  void testUserRepository() {
-    assertNotNull(userRepository)
+  void testDelete() {
+    userRepository.delete(user.id)
+  }
+
+  @Test
+  void testFindById() {
+    Optional<User> userOptional = userRepository.findById(user.id)
+    assertTrue(userOptional.isPresent())
+  }
+
+  @Test
+  void testFindByEmail() {
+    Optional<User> userOptional = userRepository.findByEmail(user.email)
+    assertTrue(userOptional.isPresent())
+  }
+
+  @Test
+  void testFindByScreenName() {
+    Optional<User> userOptional = userRepository.findByScreenName(user.screenName)
+    assertTrue(userOptional.isPresent())
   }
 
 }
