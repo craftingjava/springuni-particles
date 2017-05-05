@@ -109,6 +109,7 @@
     </attributes>
   </embeddable>
 
+  <!-- AuditData -->
   <embeddable class="com.springuni.commons.domain.AuditData">
     <attributes>
       <basic name="createdAt"/>
