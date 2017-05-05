@@ -1,7 +1,5 @@
-import com.springuni.auth.domain.model.user.ConfirmationTokenType
-import com.springuni.auth.domain.model.user.User
-import com.springuni.auth.domain.model.user.UserRepository
-import com.springuni.jpa.JpaConfig
+package com.springuni.auth.domain.model.user
+
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -17,7 +15,7 @@ import static org.junit.Assert.*
  * Created by lcsontos on 5/5/17.
  */
 @RunWith(SpringJUnit4ClassRunner)
-@ContextConfiguration(classes = [JpaConfig])
+@ContextConfiguration(classes = [UserJpaTestConfiguration])
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
 class UserJpaRepositoryTest {

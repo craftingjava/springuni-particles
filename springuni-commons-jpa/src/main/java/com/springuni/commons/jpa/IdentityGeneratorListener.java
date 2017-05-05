@@ -17,18 +17,34 @@
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.springuni.jpa;
+package com.springuni.commons.jpa;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
+import com.springuni.commons.domain.Entity;
+import com.springuni.commons.util.IdentityGenerator;
+import javax.persistence.PrePersist;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Main JPA config.
+ * Created by lcsontos on 5/5/17.
  */
-@Configuration
-@ImportResource({"classpath:META-INF/db-config.xml"})
-@ComponentScan(basePackages = "com.springuni")
-public class JpaConfig {
+public class IdentityGeneratorListener {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(IdentityGeneratorListener.class);
+
+
+  /**
+   * Generates a new identity for the given {@link Entity}.
+   * @param entity Entity
+   */
+  @PrePersist
+  public void generate(Entity<Long, ?> entity) {
+    if (!entity.isNew()) {
+      return;
+    }
+    long id = IdentityGenerator.generate();
+    entity.setId(id);
+    LOGGER.debug("Generated ID {} for {}.", id, entity.getClass());
+  }
 
 }

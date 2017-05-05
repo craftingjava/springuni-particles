@@ -8,7 +8,7 @@
   <entity class="com.springuni.auth.domain.model.user.ConfirmationToken" cacheable="true"
     metadata-complete="true">
     <entity-listeners>
-      <entity-listener class="com.springuni.jpa.IdentityGeneratorListener"/>
+      <entity-listener class="com.springuni.commons.jpa.IdentityGeneratorListener"/>
     </entity-listeners>
     <attributes>
       <id name="id"/>
@@ -60,7 +60,7 @@
       </query>
     </named-query>
     <entity-listeners>
-      <entity-listener class="com.springuni.jpa.IdentityGeneratorListener"/>
+      <entity-listener class="com.springuni.commons.jpa.IdentityGeneratorListener"/>
     </entity-listeners>
     <attributes>
       <id name="id"/>

@@ -16,4 +16,32 @@
   <name>SpringUni Commons JPA</name>
   <description>Commons utilities for supporting JPA-based repository modules</description>
 
+  <dependencies>
+    <dependency>
+      <groupId>com.springuni</groupId>
+      <artifactId>springuni-commons</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-orm</artifactId>
+    </dependency>
+  </dependencies>
+
 </project>
