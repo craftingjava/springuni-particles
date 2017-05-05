@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm
+        http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd" version="2.1">
+
+  <!-- ConfirmationToken -->
+  <entity class="com.springuni.auth.domain.model.user.ConfirmationToken" cacheable="true"
+    metadata-complete="true">
+    <attributes>
+      <id name="id"/>
+      <basic name="value"/>
+      <basic name="type">
+        <enumerated>STRING</enumerated>
+      </basic>
+      <basic name="valid"/>
+      <basic name="expiresAt"/>
+      <basic name="usedAt"/>
+      <many-to-one name="owner">
+        <join-column name="user_id"/>
+      </many-to-one>
+      <embedded name="auditData"/>
+      <!-- TODO find a way to persist payload -->
+      <transient name="payload"/>
+    </attributes>
+  </entity>
+
+  <!-- User -->
+  <entity class="com.springuni.auth.domain.model.user.User" cacheable="true"
+    metadata-complete="true">
+    <table name="user_"/>
+    <named-query name="findByEmailQuery">
+      <query>
+        <![CDATA[
+          select u from User u
+          where u.contactData.email = :email
+          and u.deleted = false
+        ]]>
+      </query>
+    </named-query>
+    <named-query name="findByScreenNameQuery">
+      <query>
+        <![CDATA[
+          select u from User u
+          where u.screenName = :screenName
+          and u.deleted = false
+        ]]>
+      </query>
+    </named-query>
+    <attributes>
+      <id name="id"/>
+      <basic name="timezone">
+        <enumerated>STRING</enumerated>
+      </basic>
+      <basic name="locale"/>
+      <basic name="confirmed"/>
+      <basic name="locked"/>
+      <basic name="deleted"/>
+      <one-to-many name="confirmationTokens" fetch="LAZY" mapped-by="owner" orphan-removal="true">
+        <cascade>
+          <cascade-persist/>
+          <cascade-merge/>
+        </cascade>
+      </one-to-many>
+      <element-collection name="authorities">
+        <collection-table name="authority">
+          <join-column name="user_id"/>
+        </collection-table>
+      </element-collection>
+      <element-collection name="confirmationTokens">
+        <collection-table name="confirmation_token">
+          <join-column name="user_id"/>
+        </collection-table>
+      </element-collection>
+      <embedded name="auditData"/>
+      <embedded name="contactData"/>
+      <embedded name="password"/>
+    </attributes>
+  </entity>
+
+  <!-- AddressData -->
+  <embeddable class="com.springuni.crm.domain.contact.AddressData" metadata-complete="true">
+    <attributes>
+      <basic name="country">
+        <enumerated>STRING</enumerated>
+      </basic>
+      <basic name="state">
+        <enumerated>STRING</enumerated>
+      </basic>
+      <basic name="city"/>
+      <basic name="addressLine1"/>
+      <basic name="addressLine2"/>
+      <basic name="zipCode"/>
+      <basic name="addressType">
+        <enumerated>STRING</enumerated>
+      </basic>
+    </attributes>
+  </embeddable>
+
+  <embeddable class="com.springuni.commons.domain.AuditData">
+    <attributes>
+      <basic name="createdAt"/>
+      <basic name="modifiedAt"/>
+      <many-to-one name="createdBy"/>
+      <many-to-one name="modifiedBy"/>
+    </attributes>
+  </embeddable>
+
+  <!-- ContactData -->
+  <embeddable class="com.springuni.crm.domain.contact.ContactData" metadata-complete="true">
+    <attributes>
+      <basic name="email"/>
+      <basic name="firstName"/>
+      <basic name="lastName"/>
+      <basic name="gender">
+        <enumerated>STRING</enumerated>
+      </basic>
+      <basic name="birthday"/>
+      <element-collection name="addresses">
+        <collection-table name="address">
+          <join-column name="owner_id"/>
+        </collection-table>
+      </element-collection>
+    </attributes>
+  </embeddable>
+
+  <!-- Password -->
+  <embeddable class="com.springuni.auth.domain.model.user.Password" metadata-complete="true">
+    <attributes>
+      <basic name="passwordHash"/>
+      <basic name="passwordSalt"/>
+    </attributes>
+  </embeddable>
+</entity-mappings>

@@ -34,7 +34,7 @@ public interface UserRepository {
    * @throws NoSuchUserException if the user doesn't
    *     exist
    */
-  void delete(Long userId);
+  void delete(Long userId) throws NoSuchUserException;
 
   /**
    * Finds a user based on its ID.

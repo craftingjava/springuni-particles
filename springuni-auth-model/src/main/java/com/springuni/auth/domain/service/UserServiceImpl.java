@@ -186,7 +186,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void delete(Long userId) {
+  public void delete(Long userId) throws NoSuchUserException {
     userRepository.delete(userId);
     userEventEmitter.emit(new UserEvent(userId, DELETED));
   }
