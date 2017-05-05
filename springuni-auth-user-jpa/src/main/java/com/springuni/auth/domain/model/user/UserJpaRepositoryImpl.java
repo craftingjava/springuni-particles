@@ -32,14 +32,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * JPA-based implementation of {@link UserRepository}.
  */
-@Transactional
-@Repository
 public class UserJpaRepositoryImpl implements UserRepository {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(UserJpaRepositoryImpl.class);
@@ -56,21 +52,18 @@ public class UserJpaRepositoryImpl implements UserRepository {
   }
 
   @Override
-  @Transactional(readOnly = true)
   public Optional<User> findById(Long userId) {
     Map parameters = Stream.of(entry("userId", userId)).collect(entriesToMap());
     return doFindUser("findByIdQuery", parameters);
   }
 
   @Override
-  @Transactional(readOnly = true)
   public Optional<User> findByEmail(String email) {
     Map parameters = Stream.of(entry("email", email)).collect(entriesToMap());
     return doFindUser("findByEmailQuery", parameters);
   }
 
   @Override
-  @Transactional(readOnly = true)
   public Optional<User> findByScreenName(String screenName) {
     Map parameters = Stream.of(entry("screenName", screenName)).collect(entriesToMap());
     return doFindUser("findByScreenNameQuery", parameters);
