@@ -19,8 +19,8 @@
 
 package com.springuni.auth.domain.model.user;
 
-import static com.springuni.commons.util.Maps.entry;
 import static com.springuni.commons.util.Maps.entriesToMap;
+import static com.springuni.commons.util.Maps.entry;
 
 import com.springuni.auth.domain.model.user.exceptions.NoSuchUserException;
 import java.util.Map;
