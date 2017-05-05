@@ -39,9 +39,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -51,12 +49,16 @@ import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * Support class for configuring a JPA entity manager and it's related infrastructure.
  */
 @Configuration
+@EnableTransactionManagement
 public abstract class AbstractJpaConfiguration {
+
+  private JpaTransactionManager transactionManager;
 
   /**
    * Primary data source.
@@ -110,7 +112,7 @@ public abstract class AbstractJpaConfiguration {
   public PlatformTransactionManager transactionManager(
       DataSource dataSource, EntityManagerFactory entityManagerFactory) {
 
-    JpaTransactionManager transactionManager = new JpaTransactionManager(entityManagerFactory);
+    transactionManager = new JpaTransactionManager(entityManagerFactory);
     transactionManager.setDataSource(dataSource);
     return transactionManager;
   }
