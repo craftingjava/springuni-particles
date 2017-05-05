@@ -36,6 +36,8 @@ class UserJpaRepositoryTest {
   @Test
   void testDelete() {
     userRepository.delete(user.id)
+    Optional<User> userOptional = userRepository.findById(user.id)
+    assertFalse(userOptional.isPresent())
   }
 
   @Test
