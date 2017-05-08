@@ -31,9 +31,12 @@ import static org.hibernate.cfg.AvailableSettings.PHYSICAL_NAMING_STRATEGY;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Properties;
+import java.util.Optional;
 import java.util.stream.Stream;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -52,11 +55,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * Support class for configuring a JPA entity manager and it's related infrastructure.
+ * Abstract class for configuring a JPA entity manager and it's related infrastructure.
  */
 @Configuration
 @EnableTransactionManagement
-public abstract class AbstractJpaConfiguration {
+public abstract class AbstractJpaRepositoryConfiguration {
 
   private JpaTransactionManager transactionManager;
 
@@ -67,7 +70,7 @@ public abstract class AbstractJpaConfiguration {
    */
   @Bean
   @Primary
-  public DataSource dataSource() {
+  public DataSource dataSource() throws SQLException {
     DataSource dataSourceTarget = new HikariDataSource(getHikariConfig());
     return new LazyConnectionDataSourceProxy(dataSourceTarget);
   }
@@ -92,8 +95,8 @@ public abstract class AbstractJpaConfiguration {
     Map<String, String> jpaPropertyMap = getJpaPropertyMap();
     entityManagerFactoryBean.setJpaPropertyMap(jpaPropertyMap);
 
-    entityManagerFactoryBean.setPackagesToScan(getPackagesToScan());
-    entityManagerFactoryBean.setMappingResources(getMappingResources());
+    getMappingResources().ifPresent(entityManagerFactoryBean::setMappingResources);
+    getPackagesToScan().ifPresent(entityManagerFactoryBean::setPackagesToScan);
 
     // https://hibernate.atlassian.net/browse/HHH-5303#comment-44439
     entityManagerFactoryBean.setSharedCacheMode(ENABLE_SELECTIVE);
@@ -135,20 +138,29 @@ public abstract class AbstractJpaConfiguration {
   protected void customizeJpaPropertyMap(Map<String, String> jpaPropertyMap) {
   }
 
-  protected abstract Properties getDataSourceProperties();
-
-  protected abstract String getDataSourceClassName();
-
-  protected HikariConfig getHikariConfig() {
+  protected HikariConfig getHikariConfig() throws SQLException {
     HikariConfig hikariConfig = new HikariConfig();
-    hikariConfig.setDataSourceProperties(getDataSourceProperties());
-    hikariConfig.setDataSourceClassName(getDataSourceClassName());
+
+    String jdbcUrl = getJdbcUrl().orElseThrow(IllegalStateException::new);
+    hikariConfig.setJdbcUrl(jdbcUrl);
+
+    Driver jdbcDriver = DriverManager.getDriver(jdbcUrl);
+    hikariConfig.setDriverClassName(jdbcDriver.getClass().getName());
+
+    getJdbcUsername().ifPresent(hikariConfig::setUsername);
+    getJdbcPassword().ifPresent(hikariConfig::setPassword);
     return hikariConfig;
   }
 
-  protected abstract String[] getMappingResources();
+  protected abstract Optional<String> getJdbcUrl();
 
-  protected abstract String[] getPackagesToScan();
+  protected abstract Optional<String> getJdbcUsername();
+
+  protected abstract Optional<String> getJdbcPassword();
+
+  protected abstract Optional<String[]> getMappingResources();
+
+  protected abstract Optional<String[]> getPackagesToScan();
 
   protected Map<String, String> getJpaPropertyMap() {
     Map<String, String> jpaPropertyMap = Stream.of(

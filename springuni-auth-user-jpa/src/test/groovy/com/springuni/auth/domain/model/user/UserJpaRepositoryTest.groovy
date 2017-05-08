@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
-import org.springframework.test.context.transaction.TransactionConfiguration
 import org.springframework.transaction.annotation.Transactional
 
 import static org.junit.Assert.*
@@ -16,7 +15,7 @@ import static org.junit.Assert.*
  * Created by lcsontos on 5/5/17.
  */
 @RunWith(SpringJUnit4ClassRunner)
-@ContextConfiguration(classes = [UserJpaTestConfiguration])
+@ContextConfiguration(classes = [UserJpaRepositoryTestConfiguration])
 @Transactional
 @Rollback
 class UserJpaRepositoryTest {
