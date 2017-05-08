@@ -43,7 +43,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
