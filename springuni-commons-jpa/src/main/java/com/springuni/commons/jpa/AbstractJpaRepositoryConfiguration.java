@@ -127,9 +127,6 @@ public abstract class AbstractJpaRepositoryConfiguration {
   protected JpaVendorAdapter createJpaVendorAdapter() {
     AbstractJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
     adapter.setShowSql(isShowSql());
-
-    // TODO: detect database automatically
-    adapter.setDatabase(Database.H2);
     return adapter;
   }
 
