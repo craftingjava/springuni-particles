@@ -26,9 +26,12 @@ import static org.hibernate.cfg.AvailableSettings.ENABLE_LAZY_LOAD_NO_TRANS;
 import static org.hibernate.cfg.AvailableSettings.FORMAT_SQL;
 import static org.hibernate.cfg.AvailableSettings.GENERATE_STATISTICS;
 import static org.hibernate.cfg.AvailableSettings.HBM2DDL_AUTO;
+import static org.hibernate.cfg.AvailableSettings.IMPLICIT_NAMING_STRATEGY;
 import static org.hibernate.cfg.AvailableSettings.LOG_SESSION_METRICS;
 import static org.hibernate.cfg.AvailableSettings.PHYSICAL_NAMING_STRATEGY;
 
+import com.springuni.commons.hibernate.ImprovedImplicitNamingStrategy;
+import com.springuni.commons.hibernate.ImprovedPhysicalNamingStrategy;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Driver;
@@ -168,8 +171,9 @@ public abstract class AbstractJpaRepositoryConfiguration {
         entry(HBM2DDL_AUTO, "validate"),
         entry(ENABLE_LAZY_LOAD_NO_TRANS, "true"),
 
-        // TODO: implement replacement for org.hibernate.cfg.ImprovedNamingStrategy
-        entry(PHYSICAL_NAMING_STRATEGY, PhysicalNamingStrategyStandardImpl.class.getName()),
+        // https://hibernate.atlassian.net/browse/HHH-10155
+        entry(IMPLICIT_NAMING_STRATEGY, ImprovedImplicitNamingStrategy.class.getName()),
+        entry(PHYSICAL_NAMING_STRATEGY, ImprovedPhysicalNamingStrategy.class.getName()),
 
         // https://hibernate.atlassian.net/browse/HHH-8793
         entry(GENERATE_STATISTICS, "true"),
