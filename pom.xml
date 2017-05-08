@@ -14,6 +14,7 @@
   <modules>
     <module>springuni-commons</module>
     <module>springuni-commons-jpa</module>
+    <module>springuni-commons-rest</module>
     <module>springuni-auth-model</module>
     <module>springuni-auth-user-jpa</module>
     <module>springuni-auth-rest</module>
