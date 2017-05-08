@@ -98,6 +98,8 @@ public abstract class AbstractJpaConfiguration {
     // https://hibernate.atlassian.net/browse/HHH-5303#comment-44439
     entityManagerFactoryBean.setSharedCacheMode(ENABLE_SELECTIVE);
 
+    customizeEntityManagerFactoryBean(entityManagerFactoryBean);
+
     return entityManagerFactoryBean;
   }
 
@@ -124,6 +126,10 @@ public abstract class AbstractJpaConfiguration {
     // TODO: detect database automatically
     adapter.setDatabase(Database.H2);
     return adapter;
+  }
+
+  protected void customizeEntityManagerFactoryBean(
+      LocalContainerEntityManagerFactoryBean entityManagerFactoryBean) {
   }
 
   protected void customizeJpaPropertyMap(Map<String, String> jpaPropertyMap) {
