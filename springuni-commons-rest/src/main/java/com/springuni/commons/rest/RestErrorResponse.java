@@ -17,13 +17,25 @@
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.springuni.auth.domain.model.user.exceptions;
+package com.springuni.commons.rest;
 
-import com.springuni.commons.domain.exceptions.EntityNotFoundException;
+import lombok.Data;
+import org.springframework.http.HttpStatus;
 
 /**
- * Thrown when the given user doesn't exist.
+ * Created by lcsontos on 5/10/17.
  */
-public class NoSuchUserException extends EntityNotFoundException {
+@Data
+public class RestErrorResponse {
+
+  private final int statusCode;
+  private final String reasonPhrase;
+  private final String detailMessage;
+
+  public RestErrorResponse(HttpStatus status, Exception ex) {
+    statusCode = status.value();
+    reasonPhrase = status.getReasonPhrase();
+    this.detailMessage = ex.getMessage();
+  }
 
 }

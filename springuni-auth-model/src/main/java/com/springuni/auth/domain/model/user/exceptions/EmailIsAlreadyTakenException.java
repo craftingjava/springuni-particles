@@ -19,10 +19,10 @@
 
 package com.springuni.auth.domain.model.user.exceptions;
 
-import com.springuni.commons.domain.exceptions.ApplicationException;
+import com.springuni.commons.domain.exceptions.EntityAlreadyExistsException;
 
 /**
  * Thrown when the desired email address is already taken.
  */
-public class EmailIsAlreadyTakenException extends ApplicationException {
+public class EmailIsAlreadyTakenException extends EntityAlreadyExistsException {
 }
