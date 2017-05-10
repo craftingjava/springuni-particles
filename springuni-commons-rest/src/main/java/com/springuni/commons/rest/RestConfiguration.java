@@ -20,19 +20,19 @@ public class RestConfiguration extends WebMvcConfigurationSupport {
     return new ControllerAdviceBean(controllerAdvice);
   }
 
-  @Bean
-  public DefaultController defaultController() {
-    return new DefaultController();
-  }
-
   protected Object createControllerAdvice() {
     return new RestErrorHandler();
+  }
+
+  protected Object createDefaultHandler() {
+    return new DefaultController();
   }
 
   @Override
   protected RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
     RequestMappingHandlerMapping handlerMapping = super.createRequestMappingHandlerMapping();
-    handlerMapping.setDefaultHandler("defaultController");
+    Object defaultHandler = createDefaultHandler();
+    handlerMapping.setDefaultHandler(defaultHandler);
     return handlerMapping;
   }
 
