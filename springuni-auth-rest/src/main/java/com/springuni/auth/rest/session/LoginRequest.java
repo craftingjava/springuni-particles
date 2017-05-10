@@ -17,12 +17,17 @@
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.springuni.auth.domain.model.user.exceptions;
+package com.springuni.auth.rest.session;
 
-import com.springuni.commons.domain.exceptions.ApplicationException;
+import lombok.Data;
 
 /**
- * Thrown when the given confirmation token isn't valid any more.
+ * Created by lcsontos on 5/10/17.
  */
-public class InvalidConfirmationTokenException extends ApplicationException {
+@Data
+public class LoginRequest {
+
+  private String username;
+  private String password;
+
 }

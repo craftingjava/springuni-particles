@@ -19,8 +19,10 @@
 
 package com.springuni.auth.domain.model.user.exceptions;
 
+import com.springuni.commons.domain.exceptions.ApplicationException;
+
 /**
  * Thrown when an invalid email address is encountered.
  */
-public class InvalidEmailException extends Exception {
+public class InvalidEmailException extends ApplicationException {
 }

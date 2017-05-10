@@ -332,6 +332,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User store(User user) {
+    // FIXME: don't overwrite email, screenname and password here.
     return userRepository.save(user);
   }
 

@@ -19,8 +19,10 @@
 
 package com.springuni.auth.domain.model.user.exceptions;
 
+import com.springuni.commons.domain.exceptions.ApplicationException;
+
 /**
  * Thrown when the desired screen name is already taken.
  */
-public class ScreenNameIsAlreadyTakenException extends Exception {
+public class ScreenNameIsAlreadyTakenException extends ApplicationException {
 }

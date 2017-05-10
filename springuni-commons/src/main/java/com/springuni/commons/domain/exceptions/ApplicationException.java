@@ -17,12 +17,10 @@
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.springuni.auth.domain.model.user.exceptions;
-
-import com.springuni.commons.domain.exceptions.ApplicationException;
+package com.springuni.commons.domain.exceptions;
 
 /**
- * Thrown when the given confirmation token isn't valid any more.
+ * Created by lcsontos on 5/10/17.
  */
-public class InvalidConfirmationTokenException extends ApplicationException {
+public class ApplicationException extends Exception {
 }

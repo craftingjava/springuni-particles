@@ -19,9 +19,11 @@
 
 package com.springuni.auth.domain.model.user.exceptions;
 
+import com.springuni.commons.domain.exceptions.ApplicationException;
+
 /**
  * Thrown when the given user doesn't exist.
  */
-public class NoSuchUserException extends Exception {
+public class NoSuchUserException extends ApplicationException {
 
 }

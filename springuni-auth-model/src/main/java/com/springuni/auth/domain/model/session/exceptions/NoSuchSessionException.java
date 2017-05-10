@@ -19,8 +19,10 @@
 
 package com.springuni.auth.domain.model.session.exceptions;
 
+import com.springuni.commons.domain.exceptions.ApplicationException;
+
 /**
  * Thrown when a session doesn't exist or expired.
  */
-public class NoSuchSessionException extends Exception {
+public class NoSuchSessionException extends ApplicationException {
 }

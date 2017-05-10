@@ -19,8 +19,10 @@
 
 package com.springuni.auth.domain.model.user.exceptions;
 
+import com.springuni.commons.domain.exceptions.ApplicationException;
+
 /**
  * Thrown when an unconfirmed user tries to log in.
  */
-public class UnconfirmedUserException extends Exception {
+public class UnconfirmedUserException extends ApplicationException {
 }

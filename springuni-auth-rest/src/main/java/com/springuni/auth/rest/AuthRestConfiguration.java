@@ -17,12 +17,32 @@
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.springuni.auth.domain.model.user.exceptions;
+package com.springuni.auth.rest;
 
-import com.springuni.commons.domain.exceptions.ApplicationException;
+import com.springuni.auth.domain.service.UserService;
+
+import com.springuni.auth.rest.user.UserController;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
- * Thrown when the given confirmation token isn't valid any more.
+ * Created by lcsontos on 5/9/17.
  */
-public class InvalidConfirmationTokenException extends ApplicationException {
+@Configuration
+@EnableWebMvc
+public class AuthRestConfiguration {
+
+  /**
+   * Creates the {@link UserController} instance.
+   *
+   * @param userService UserService
+   * @return UserController
+   */
+  @Bean
+  public UserController userController(UserService userService) {
+    return new UserController(userService);
+  }
+
 }
