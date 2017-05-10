@@ -32,10 +32,18 @@ public class RestErrorResponse {
   private final String reasonPhrase;
   private final String detailMessage;
 
-  public RestErrorResponse(HttpStatus status, Exception ex) {
+  protected RestErrorResponse(HttpStatus status, String detailMessage) {
     statusCode = status.value();
     reasonPhrase = status.getReasonPhrase();
-    this.detailMessage = ex.getMessage();
+    this.detailMessage = detailMessage;
+  }
+
+  public static RestErrorResponse of(HttpStatus status) {
+    return of(status, null);
+  }
+
+  public static RestErrorResponse of(HttpStatus status, Exception ex) {
+    return new RestErrorResponse(status, ex.getMessage());
   }
 
 }

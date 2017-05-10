@@ -79,7 +79,7 @@ public class RestErrorHandler extends ResponseEntityExceptionHandler {
   protected ResponseEntity<Object> handleExceptionInternal(
       Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-    RestErrorResponse restErrorResponse = new RestErrorResponse(status, ex);
+    RestErrorResponse restErrorResponse = RestErrorResponse.of(status, ex);
     return super.handleExceptionInternal(ex, restErrorResponse, headers, status, request);
   }
 
