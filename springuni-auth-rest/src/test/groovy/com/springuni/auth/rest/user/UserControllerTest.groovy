@@ -1,6 +1,7 @@
 package com.springuni.auth.rest.user
 
 import com.springuni.auth.domain.model.user.User
+import com.springuni.auth.domain.model.user.exceptions.NoSuchUserException
 import com.springuni.auth.domain.service.UserService
 import com.springuni.auth.rest.AuthRestTestConfiguration
 import org.junit.Before
@@ -42,6 +43,7 @@ class UserControllerTest {
   void before() {
     mockMvc = MockMvcBuilders.webAppContextSetup(context).build()
 
+    when(userService.getUser(0L)).thenThrow(NoSuchUserException)
     when(userService.getUser(1L))
         .thenReturn(new User(1L, "test", "test@springuni.com"))
   }
@@ -56,6 +58,18 @@ class UserControllerTest {
         .andDo(print())
 
     verify(userService).getUser(1L)
+    verifyNoMoreInteractions(userService)
+  }
+
+  @Test
+  void testGetUser_notFound() {
+    mockMvc.perform(get("/users/0").contentType(APPLICATION_JSON))
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("statusCode", is(404)))
+        .andExpect(jsonPath("reasonPhrase", is("Not Found")))
+        .andDo(print())
+
+    verify(userService).getUser(0L)
     verifyNoMoreInteractions(userService)
   }
 
