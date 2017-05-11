@@ -19,18 +19,14 @@
   <dependencies>
     <dependency>
       <groupId>com.springuni</groupId>
-      <artifactId>springuni-auth-model</artifactId>
+      <artifactId>springuni-commons-rest</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>
-      <groupId>org.modelmapper.extensions</groupId>
-      <artifactId>modelmapper-spring</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-webmvc</artifactId>
+      <groupId>com.springuni</groupId>
+      <artifactId>springuni-auth-model</artifactId>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>

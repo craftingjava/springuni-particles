@@ -44,9 +44,9 @@ public class UserController {
   private final UserService userService;
   private final ModelMapper modelMapper;
 
-  public UserController(UserService userService, ModelMapper modelMapper) {
-    this.userService = userService;
+  public UserController(ModelMapper modelMapper, UserService userService) {
     this.modelMapper = modelMapper;
+    this.userService = userService;
   }
 
   @GetMapping("/{userId}")

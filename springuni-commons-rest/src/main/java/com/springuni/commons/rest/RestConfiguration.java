@@ -1,5 +1,6 @@
 package com.springuni.commons.rest;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.ControllerAdviceBean;
@@ -20,12 +21,22 @@ public class RestConfiguration extends WebMvcConfigurationSupport {
     return new ControllerAdviceBean(controllerAdvice);
   }
 
+  @Bean
+  public ModelMapper modelMapper() {
+    ModelMapper modelMapper = new ModelMapper();
+    customizeModelMapper(modelMapper);
+    return modelMapper;
+  }
+
   protected Object createControllerAdvice() {
     return new RestErrorHandler();
   }
 
   protected Object createDefaultHandler() {
     return new DefaultController();
+  }
+
+  protected void customizeModelMapper(ModelMapper modelMapper) {
   }
 
   @Override
