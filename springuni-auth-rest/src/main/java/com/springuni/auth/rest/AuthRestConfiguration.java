@@ -24,6 +24,7 @@ import com.springuni.auth.domain.service.UserService;
 import com.springuni.auth.rest.user.UserController;
 
 import com.springuni.auth.rest.user.UserDtoMap;
+import com.springuni.auth.rest.user.UserMap;
 import com.springuni.commons.rest.RestConfiguration;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -50,6 +51,7 @@ public class AuthRestConfiguration extends RestConfiguration {
 
   @Override
   protected void customizeModelMapper(ModelMapper modelMapper) {
+    modelMapper.addMappings(new UserMap());
     modelMapper.addMappings(new UserDtoMap());
   }
 

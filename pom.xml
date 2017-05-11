@@ -34,9 +34,10 @@
     <HikariCP.version>2.6.1</HikariCP.version>
     <jackson.version>2.8.5</jackson.version>
     <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+    <json-path.version>2.2.0</json-path.version>
     <junit.version>4.12</junit.version>
     <mockito.version>2.7.22</mockito.version>
-    <logback.version>1.1.2</logback.version>
+    <logback.version>1.2.3</logback.version>
     <lombok.version>1.16.16</lombok.version>
     <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
     <maven-compiler-plugin.source.version>1.8</maven-compiler-plugin.source.version>
@@ -302,6 +303,13 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.jayway.jsonpath</groupId>
+      <artifactId>json-path</artifactId>
+      <version>${json-path.version}</version>
       <scope>test</scope>
     </dependency>
 
