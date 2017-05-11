@@ -43,6 +43,8 @@ class UserControllerTest {
   void before() {
     mockMvc = MockMvcBuilders.webAppContextSetup(context).build()
 
+    reset(userService)
+
     when(userService.getUser(0L)).thenThrow(NoSuchUserException)
     when(userService.getUser(1L))
         .thenReturn(new User(1L, "test", "test@springuni.com"))
