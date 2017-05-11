@@ -46,7 +46,7 @@
     <modelmapper-spring.version>0.7.8</modelmapper-spring.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <slf4j-api.version>1.7.13</slf4j-api.version>
+    <slf4j-api.version>1.7.25</slf4j-api.version>
     <spring.framework.version>4.3.7.RELEASE</spring.framework.version>
     <spring.framework.boot.version>1.5.2.RELEASE</spring.framework.boot.version>
   </properties>
