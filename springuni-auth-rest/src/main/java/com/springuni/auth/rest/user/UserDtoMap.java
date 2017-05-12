@@ -30,7 +30,15 @@ public class UserDtoMap extends PropertyMap<UserDto, User> {
 
   @Override
   protected void configure() {
+    skip().setEmail(null);
+    skip().setScreenName(null);
     skip().setPassword(null);
+    skip().setAuthorities(null);
+    skip().setConfirmed(false);
+    skip().setLocked(false);
+    skip().setDeleted(false);
+    skip().setAuditData(null);
+    skip().setConfirmationTokens(null);
   }
 
 }

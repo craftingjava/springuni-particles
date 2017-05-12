@@ -33,6 +33,7 @@ public class RestConfiguration extends WebMvcConfigurationSupport {
   public ModelMapper modelMapper() {
     ModelMapper modelMapper = new ModelMapper();
     customizeModelMapper(modelMapper);
+    modelMapper.validate();
     return modelMapper;
   }
 
