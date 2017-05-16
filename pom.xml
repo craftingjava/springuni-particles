@@ -49,6 +49,7 @@
     <slf4j-api.version>1.7.25</slf4j-api.version>
     <spring.framework.version>4.3.7.RELEASE</spring.framework.version>
     <spring.framework.boot.version>1.5.2.RELEASE</spring.framework.boot.version>
+    <spring.framework.security.version>4.2.2.RELEASE</spring.framework.security.version>
   </properties>
 
   <build>
@@ -247,6 +248,14 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
         <version>${spring.framework.boot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-bom</artifactId>
+        <version>${spring.framework.security.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
