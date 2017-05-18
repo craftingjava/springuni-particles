@@ -17,8 +17,9 @@
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.springuni.auth.domain.model.user;
+package com.springuni.auth.domain.model.userevent;
 
+import com.springuni.auth.domain.model.user.User;
 import com.springuni.commons.domain.DomainEvent;
 import java.util.Optional;
 import lombok.Data;

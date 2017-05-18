@@ -3,8 +3,9 @@ package com.springuni.auth.domain.service
 import com.springuni.auth.domain.model.user.ConfirmationToken
 import com.springuni.auth.domain.model.user.Password
 import com.springuni.auth.domain.model.user.User
-import com.springuni.auth.domain.model.user.UserEvent
-import com.springuni.auth.domain.model.user.UserEventType
+import com.springuni.auth.domain.model.userevent.UserEvent
+import com.springuni.auth.domain.model.userevent.UserEventEmitter
+import com.springuni.auth.domain.model.userevent.UserEventType
 import com.springuni.auth.domain.model.user.UserRepository
 import auth.domain.model.user.exceptions.*
 import com.springuni.auth.crypto.PasswordChecker
@@ -14,9 +15,6 @@ import com.springuni.auth.domain.model.user.exceptions.InvalidConfirmationTokenE
 import com.springuni.auth.domain.model.user.exceptions.NoSuchUserException
 import com.springuni.auth.domain.model.user.exceptions.ScreenNameIsAlreadyTakenException
 import com.springuni.auth.domain.model.user.exceptions.UnconfirmedUserException
-import com.springuni.auth.domain.service.UserEventEmitter
-import com.springuni.auth.domain.service.UserService
-import com.springuni.auth.domain.service.UserServiceImpl
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

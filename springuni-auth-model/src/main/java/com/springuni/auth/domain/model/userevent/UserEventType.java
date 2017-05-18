@@ -17,16 +17,23 @@
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.springuni.auth.domain.service;
-
-import com.springuni.auth.domain.model.user.UserEvent;
+package com.springuni.auth.domain.model.userevent;
 
 /**
- * Functional interface to emitting {@link UserEvent}s.
+ * User event type.
  */
-@FunctionalInterface
-public interface UserEventEmitter {
+public enum UserEventType {
 
-  void emit(UserEvent userEvent);
+  DELETED,
+  EMAIL_CHANGED,
+  EMAIL_CHANGE_REQUESTED,
+  EMAIL_CONFIRMED,
+  PASSWORD_CHANGED,
+  PASSWORD_RESET_CONFIRMED,
+  PASSWORD_RESET_REQUESTED,
+  SCREEN_NAME_CHANGED,
+  SIGNIN_SUCCEEDED,
+  SIGNIN_FAILED,
+  SIGNUP_REQUESTED;
 
 }
