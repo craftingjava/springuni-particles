@@ -4,7 +4,7 @@ import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.servlet.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -23,30 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfigurationSupport extends WebSecurityConfigurerAdapter {
 
-  private static final String LOGIN_ENDPOINT = "/session";
-
-  @Autowired
-  private JwtAuthenticationFilter jwtAuthenticationFilter;
-
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    super.configure(auth);
-  }
-
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    customizeRequestAuthorization(http.csrf().disable()
-        .sessionManagement().sessionCreationPolicy(STATELESS)
-        .and()
-        .authorizeRequests()
-        .antMatchers("/").permitAll()
-        .antMatchers(POST, LOGIN_ENDPOINT).permitAll()
-        .anyRequest().authenticated()
-        .and());
-
-    customizeFilters(
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class));
-  }
+  protected static final String LOGIN_ENDPOINT = "/session";
 
   @Bean
   public AuthenticationEntryPoint authenticationEntryPoint(ObjectMapper objectMapper) {
@@ -66,13 +43,40 @@ public class SecurityConfigurationSupport extends WebSecurityConfigurerAdapter {
   }
 
   @Bean
-  public JwtAuthenticationFilter jwtAuthenticationFilter(JwtTokenService jwtTokenService) {
-    return new JwtAuthenticationFilter(jwtTokenService);
-  }
-
-  @Bean
   public JwtTokenService jwtTokenService() {
     return new JwtTokenServiceImpl();
+  }
+
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    super.configure(auth);
+  }
+
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    AuthenticationEntryPoint authenticationEntryPoint =
+        (AuthenticationEntryPoint) getApplicationContext().getBean("authenticationEntryPoint");
+
+    customizeRequestAuthorization(http.csrf().disable()
+        .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
+        .and()
+        .sessionManagement().sessionCreationPolicy(STATELESS)
+        .and()
+        .authorizeRequests()
+        .antMatchers("/").permitAll()
+        .antMatchers(POST, LOGIN_ENDPOINT).permitAll()
+        .anyRequest().authenticated()
+        .and());
+
+    customizeFilters(
+        http.addFilterBefore(
+            createJwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class));
+  }
+
+  protected Filter createJwtAuthenticationFilter() {
+    JwtTokenService jwtTokenService =
+        (JwtTokenService)getApplicationContext().getBean("jwtTokenService");
+    return new JwtAuthenticationFilter(jwtTokenService);
   }
 
   protected void customizeFilters(HttpSecurity http) {

@@ -23,6 +23,7 @@ import com.springuni.auth.domain.model.session.Session;
 import com.springuni.auth.domain.model.user.User;
 import com.springuni.auth.domain.service.SessionService;
 import com.springuni.auth.domain.service.UserService;
+import com.springuni.auth.security.LoginRequest;
 import com.springuni.commons.domain.exceptions.ApplicationException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

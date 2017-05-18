@@ -17,7 +17,7 @@
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.springuni.auth.rest.session;
+package com.springuni.auth.security;
 
 import lombok.Data;
 
