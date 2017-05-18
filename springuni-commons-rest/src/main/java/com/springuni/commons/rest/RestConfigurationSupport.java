@@ -22,7 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  */
 @EnableWebMvc
 @Configuration
-public class RestConfiguration extends WebMvcConfigurationSupport {
+public class RestConfigurationSupport extends WebMvcConfigurationSupport {
 
   @Bean
   public Object controllerAdvice() {

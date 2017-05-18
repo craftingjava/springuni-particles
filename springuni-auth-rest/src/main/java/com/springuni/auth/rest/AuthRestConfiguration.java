@@ -25,7 +25,7 @@ import com.springuni.auth.rest.user.UserController;
 
 import com.springuni.auth.rest.user.UserDtoMap;
 import com.springuni.auth.rest.user.UserMap;
-import com.springuni.commons.rest.RestConfiguration;
+import com.springuni.commons.rest.RestConfigurationSupport;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +36,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  */
 @Configuration
 @EnableWebMvc
-public class AuthRestConfiguration extends RestConfiguration {
+public class AuthRestConfiguration extends RestConfigurationSupport {
 
   /**
    * Creates the {@link UserController} instance.
