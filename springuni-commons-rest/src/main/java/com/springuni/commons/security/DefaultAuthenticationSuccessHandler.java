@@ -17,13 +17,11 @@
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.springuni.auth.rest.session;
+package com.springuni.commons.security;
 
-import static com.springuni.auth.domain.model.session.Session.DEFAULT_EXPIRATION_MINUTES;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.springuni.commons.security.JwtTokenService;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,12 +31,16 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 /**
  * Created by lcsontos on 5/17/17.
  */
-public class LoginSuccessHandler implements AuthenticationSuccessHandler {
+public class DefaultAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+
+  private static final int ONE_DAY_MINUTES = 24 * 60;
 
   private final JwtTokenService jwtTokenService;
   private final ObjectMapper objectMapper;
 
-  public LoginSuccessHandler(JwtTokenService jwtTokenService, ObjectMapper objectMapper) {
+  public DefaultAuthenticationSuccessHandler(
+      JwtTokenService jwtTokenService, ObjectMapper objectMapper) {
+
     this.jwtTokenService = jwtTokenService;
     this.objectMapper = objectMapper;
   }
@@ -50,7 +52,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     response.setContentType(APPLICATION_JSON_VALUE);
 
-    String jwtToken = jwtTokenService.createJwtToken(authentication, DEFAULT_EXPIRATION_MINUTES);
+    String jwtToken = jwtTokenService.createJwtToken(authentication, ONE_DAY_MINUTES);
     objectMapper.writeValue(response.getWriter(), jwtToken);
   }
 
