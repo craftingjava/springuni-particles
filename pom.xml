@@ -34,6 +34,7 @@
     <HikariCP.version>2.6.1</HikariCP.version>
     <jackson.version>2.8.5</jackson.version>
     <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+    <jjwt.version>0.7.0</jjwt.version>
     <json-path.version>2.2.0</json-path.version>
     <junit.version>4.12</junit.version>
     <mockito.version>2.7.22</mockito.version>
@@ -216,6 +217,12 @@
         <groupId>com.zaxxer</groupId>
         <artifactId>HikariCP</artifactId>
         <version>${HikariCP.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt</artifactId>
+        <version>${jjwt.version}</version>
       </dependency>
 
       <dependency>
