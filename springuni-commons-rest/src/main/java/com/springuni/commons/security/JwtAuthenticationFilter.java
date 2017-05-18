@@ -17,7 +17,7 @@
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.springuni.auth.security;
+package com.springuni.commons.security;
 
 import java.io.IOException;
 import javax.servlet.FilterChain;

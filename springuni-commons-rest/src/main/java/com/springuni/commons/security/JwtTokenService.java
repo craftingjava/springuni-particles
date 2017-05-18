@@ -17,31 +17,18 @@
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.springuni.auth.security;
+package com.springuni.commons.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.AuthenticationEntryPoint;
 
 /**
- * Created by lcsontos on 5/18/17.
+ * Created by lcsontos on 5/17/17.
  */
-public class JwtAuthenticationEntryPoint
-    extends DefaultAuthenticationFailureHandler implements AuthenticationEntryPoint {
+public interface JwtTokenService {
 
-  public JwtAuthenticationEntryPoint(ObjectMapper objectMapper) {
-    super(objectMapper);
-  }
+  String createJwtToken(Authentication authentication, int minutes);
 
-  @Override
-  public void commence(
-      HttpServletRequest request, HttpServletResponse response,
-      AuthenticationException authException) throws IOException {
-
-    onAuthenticationFailure(request, response, authException);
-  }
+  Authentication parseJwtToken(String jwtToken) throws AuthenticationException;
 
 }

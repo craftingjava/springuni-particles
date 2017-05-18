@@ -19,10 +19,11 @@
 
 package com.springuni.auth.rest.session;
 
+import static com.springuni.auth.domain.model.session.Session.DEFAULT_EXPIRATION_MINUTES;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.springuni.auth.security.JwtTokenService;
+import com.springuni.commons.security.JwtTokenService;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,7 +50,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     response.setContentType(APPLICATION_JSON_VALUE);
 
-    String jwtToken = jwtTokenService.createJwtToken(authentication);
+    String jwtToken = jwtTokenService.createJwtToken(authentication, DEFAULT_EXPIRATION_MINUTES);
     objectMapper.writeValue(response.getWriter(), jwtToken);
   }
 

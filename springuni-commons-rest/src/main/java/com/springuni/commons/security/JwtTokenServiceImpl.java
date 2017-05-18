@@ -17,9 +17,8 @@
  * along with springuni-particles.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.springuni.auth.security;
+package com.springuni.commons.security;
 
-import static com.springuni.auth.domain.model.session.Session.DEFAULT_EXPIRATION_MINUTES;
 import static io.jsonwebtoken.SignatureAlgorithm.HS512;
 import static java.lang.System.currentTimeMillis;
 
@@ -49,11 +48,11 @@ public class JwtTokenServiceImpl implements JwtTokenService {
   static final String SECRET = "ThisIsASecret";
 
   @Override
-  public String createJwtToken(Authentication authentication) {
+  public String createJwtToken(Authentication authentication, int minutes) {
     Claims claims = Jwts.claims()
         .setId(String.valueOf(IdentityGenerator.generate()))
         .setSubject(authentication.getName())
-        .setExpiration(new Date(currentTimeMillis() + DEFAULT_EXPIRATION_MINUTES * 60 * 1000))
+        .setExpiration(new Date(currentTimeMillis() + minutes * 60 * 1000))
         .setIssuedAt(new Date());
 
     String authorities = authentication.getAuthorities()
