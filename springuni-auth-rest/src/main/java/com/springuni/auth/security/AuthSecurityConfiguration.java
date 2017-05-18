@@ -18,6 +18,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
 
   @Bean
+  @Override
+  public AuthenticationManager authenticationManagerBean() throws Exception {
+    return super.authenticationManagerBean();
+  }
+
+  @Bean
   public LoginFilter loginFilter(
       AuthenticationManager authenticationManager,
       AuthenticationSuccessHandler authenticationSuccessHandler,
