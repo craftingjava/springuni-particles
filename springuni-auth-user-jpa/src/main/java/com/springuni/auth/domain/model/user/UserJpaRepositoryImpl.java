@@ -30,12 +30,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * JPA-based implementation of {@link UserRepository}.
  */
+@Transactional
 public class UserJpaRepositoryImpl implements UserRepository {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(UserJpaRepositoryImpl.class);

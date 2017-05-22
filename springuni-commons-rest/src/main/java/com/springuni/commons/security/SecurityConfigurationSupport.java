@@ -23,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfigurationSupport extends WebSecurityConfigurerAdapter {
 
-  protected static final String LOGIN_ENDPOINT = "/session";
+  protected static final String LOGIN_ENDPOINT = "/sessions";
 
   @Bean
   public AuthenticationEntryPoint authenticationEntryPoint(ObjectMapper objectMapper) {
@@ -57,16 +57,17 @@ public class SecurityConfigurationSupport extends WebSecurityConfigurerAdapter {
     AuthenticationEntryPoint authenticationEntryPoint =
         (AuthenticationEntryPoint) getApplicationContext().getBean("authenticationEntryPoint");
 
-    customizeRequestAuthorization(http.csrf().disable()
+    http.csrf().disable()
         .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
         .and()
-        .sessionManagement().sessionCreationPolicy(STATELESS)
-        .and()
-        .authorizeRequests()
+        .sessionManagement().sessionCreationPolicy(STATELESS);
+
+    customizeRequestAuthorization(http.authorizeRequests()
         .antMatchers("/").permitAll()
         .antMatchers(POST, LOGIN_ENDPOINT).permitAll()
-        .anyRequest().authenticated()
         .and());
+
+    http.authorizeRequests().anyRequest().authenticated();
 
     customizeFilters(
         http.addFilterBefore(
@@ -82,7 +83,7 @@ public class SecurityConfigurationSupport extends WebSecurityConfigurerAdapter {
   protected void customizeFilters(HttpSecurity http) {
   }
 
-  protected void customizeRequestAuthorization(HttpSecurity http) {
+  protected void customizeRequestAuthorization(HttpSecurity http) throws Exception {
   }
 
 }
