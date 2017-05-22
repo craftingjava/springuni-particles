@@ -18,7 +18,7 @@ public class UserJpaRepositoryConfiguration extends JpaRepositoryConfigurationSu
 
   // TODO: remove when liquibase got integrated
   protected void customizeJpaPropertyMap(Map<String, String> jpaPropertyMap) {
-    jpaPropertyMap.put(AvailableSettings.HBM2DDL_AUTO, "create");
+    jpaPropertyMap.put(AvailableSettings.HBM2DDL_AUTO, "update");
   }
 
   @Override
