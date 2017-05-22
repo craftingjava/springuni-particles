@@ -63,8 +63,8 @@ public class RestErrorHandler extends ResponseEntityExceptionHandler {
     return handleExceptionInternal(ex, NOT_FOUND);
   }
 
-  @ExceptionHandler(RuntimeException.class)
-  public ResponseEntity<Object> handleRuntimeException(final RuntimeException ex) {
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<Object> handleException(final Exception ex) {
     return handleExceptionInternal(ex, INTERNAL_SERVER_ERROR);
   }
 

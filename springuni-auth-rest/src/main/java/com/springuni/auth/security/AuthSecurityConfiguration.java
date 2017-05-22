@@ -5,6 +5,7 @@ import com.springuni.auth.domain.service.UserService;
 import com.springuni.commons.security.SecurityConfigurationSupport;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -47,8 +48,8 @@ public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
   }
 
   @Override
-  protected void customizeRequestAuthorization(HttpSecurity http) {
-    super.customizeRequestAuthorization(http);
+  protected void customizeRequestAuthorization(HttpSecurity http) throws Exception {
+    http.authorizeRequests().antMatchers(HttpMethod.POST, "/users").permitAll();
   }
 
 }

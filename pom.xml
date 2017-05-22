@@ -19,6 +19,7 @@
     <module>springuni-auth-user-jpa</module>
     <module>springuni-auth-rest</module>
     <module>springuni-crm-model</module>
+    <module>springuni-auth-boot</module>
   </modules>
 
   <properties>
@@ -45,6 +46,7 @@
     <maven-compiler-plugin.target.version>1.8</maven-compiler-plugin.target.version>
     <maven-failsafe-plugin.version>2.19.1</maven-failsafe-plugin.version>
     <modelmapper-spring.version>0.7.8</modelmapper-spring.version>
+    <mysql-connector-java.version>6.0.6</mysql-connector-java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <slf4j-api.version>1.7.25</slf4j-api.version>
@@ -273,6 +275,12 @@
         <version>${jackson.version}</version>
         <scope>import</scope>
         <type>pom</type>
+      </dependency>
+
+      <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>${mysql-connector-java.version}</version>
       </dependency>
 
       <!-- Test dependencies -->
