@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+
+  <jmxConfigurator/>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>[#|%date{"yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+        UTC}|%-5level|%-25thread|%-25logger{10}|%X{REMOTE_ADDR}|%file:%line|%msg|#]%n
+      </pattern>
+    </encoder>
+
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="STDOUT"/>
+  </root>
+
+  <logger name="com.springuni" level="DEBUG" additivity="false">
+    <appender-ref ref="STDOUT"/>
+  </logger>
+
+  <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+    <appender-ref ref="STDOUT"/>
+  </logger>
+
+  <logger name="org.hibernate.type" level="TRACE" additivity="false">
+    <appender-ref ref="STDOUT"/>
+  </logger>
+
+</configuration>
