@@ -328,11 +328,11 @@ public class UserServiceImpl implements UserService {
       throw new InvalidEmailException();
     }
 
-    if (findUser(email).isPresent()) {
+    if (isEmailTaken(email)) {
       throw new EmailIsAlreadyTakenException();
     }
 
-    if (findUser(user.getScreenName()).isPresent()) {
+    if (isScreenNameTaken(user.getScreenName())) {
       throw new ScreenNameIsAlreadyTakenException();
     }
 
