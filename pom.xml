@@ -41,11 +41,11 @@
     <mockito.version>2.7.22</mockito.version>
     <logback.version>1.2.3</logback.version>
     <lombok.version>1.16.16</lombok.version>
-    <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
+    <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
     <maven-compiler-plugin.source.version>1.8</maven-compiler-plugin.source.version>
     <maven-compiler-plugin.target.version>1.8</maven-compiler-plugin.target.version>
     <maven-failsafe-plugin.version>2.19.1</maven-failsafe-plugin.version>
-    <modelmapper-spring.version>0.7.8</modelmapper-spring.version>
+    <mapstruct.version>1.1.0.Final</mapstruct.version>
     <mysql-connector-java.version>6.0.6</mysql-connector-java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -67,6 +67,16 @@
           <!-- <verbose>true</verbose> -->
           <source>${maven-compiler-plugin.source.version}</source>
           <target>${maven-compiler-plugin.target.version}</target>
+
+          <!-- Add MapStruct code generator -->
+          <!-- http://mapstruct.org/documentation/stable/reference/html/#_apache_maven -->
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.mapstruct</groupId>
+              <artifactId>mapstruct-processor</artifactId>
+              <version>${mapstruct.version}</version>
+            </path>
+          </annotationProcessorPaths>
 
           <!-- Make Groovy Eclipse compiler work with Lombok annotated classes -->
           <!-- http://stackoverflow.com/a/9948860 -->
@@ -237,6 +247,12 @@
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-core</artifactId>
         <version>${hibernate-core.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.mapstruct</groupId>
+        <artifactId>mapstruct-jdk8</artifactId>
+        <version>${mapstruct.version}</version>
       </dependency>
 
       <dependency>

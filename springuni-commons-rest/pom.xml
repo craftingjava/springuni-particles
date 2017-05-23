@@ -39,8 +39,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.modelmapper.extensions</groupId>
-      <artifactId>modelmapper-spring</artifactId>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct-jdk8</artifactId>
     </dependency>
 
     <dependency>
