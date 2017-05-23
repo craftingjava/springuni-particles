@@ -3,6 +3,7 @@ package com.springuni.auth.domain.service
 import com.springuni.auth.domain.model.user.ConfirmationToken
 import com.springuni.auth.domain.model.user.Password
 import com.springuni.auth.domain.model.user.User
+import com.springuni.auth.domain.model.user.exceptions.InvalidEmailException
 import com.springuni.auth.domain.model.userevent.UserEvent
 import com.springuni.auth.domain.model.userevent.UserEventEmitter
 import com.springuni.auth.domain.model.userevent.UserEventType
@@ -288,6 +289,33 @@ class UserServiceTest {
 
     assertThat(user.confirmationTokens, hasItem(userEvent.payload.get()))
     assertEquals(PASSWORD_RESET_REQUESTED, userEvent.userEventType)
+  }
+
+  @Test(expected = EmailIsAlreadyTakenException)
+  void testSignup_withExistentEmail() {
+    User user3 = new User(3L, "test3", "test2@springuni.com")
+    userService.signup(user3, "test")
+  }
+
+  @Test(expected = ScreenNameIsAlreadyTakenException)
+  void testSignup_withExistentScreenName() {
+    User user3 = new User(3L, "test2", "test3@springuni.com")
+    userService.signup(user3, "test")
+  }
+
+  @Test(expected = InvalidEmailException)
+  void testSignup_withInvalidEmail() {
+    User user3 = new User(3L, "test2", "invalid")
+    userService.signup(user3, "test")
+  }
+
+  @Test
+  void testSignup() {
+    User user3 = new User(3L, NON_EXISTENT_USER_SCREEN_NAME, NON_EXISTENT_USER_EMAIL)
+    when(userRepository.save(user3)).thenReturn(user3)
+    userService.signup(user3, "test")
+    verify(passwordEncryptor).ecrypt("test")
+    assertEmittedUserEvent(SIGNUP_REQUESTED)
   }
 
   @Test
