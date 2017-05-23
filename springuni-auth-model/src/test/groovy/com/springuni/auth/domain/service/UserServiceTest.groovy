@@ -1,21 +1,15 @@
 package com.springuni.auth.domain.service
 
+import com.springuni.auth.crypto.PasswordChecker
+import com.springuni.auth.crypto.PasswordEncryptor
 import com.springuni.auth.domain.model.user.ConfirmationToken
 import com.springuni.auth.domain.model.user.Password
 import com.springuni.auth.domain.model.user.User
-import com.springuni.auth.domain.model.user.exceptions.InvalidEmailException
+import com.springuni.auth.domain.model.user.UserRepository
+import com.springuni.auth.domain.model.user.exceptions.*
 import com.springuni.auth.domain.model.userevent.UserEvent
 import com.springuni.auth.domain.model.userevent.UserEventEmitter
 import com.springuni.auth.domain.model.userevent.UserEventType
-import com.springuni.auth.domain.model.user.UserRepository
-import auth.domain.model.user.exceptions.*
-import com.springuni.auth.crypto.PasswordChecker
-import com.springuni.auth.crypto.PasswordEncryptor
-import com.springuni.auth.domain.model.user.exceptions.EmailIsAlreadyTakenException
-import com.springuni.auth.domain.model.user.exceptions.InvalidConfirmationTokenException
-import com.springuni.auth.domain.model.user.exceptions.NoSuchUserException
-import com.springuni.auth.domain.model.user.exceptions.ScreenNameIsAlreadyTakenException
-import com.springuni.auth.domain.model.user.exceptions.UnconfirmedUserException
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,10 +19,11 @@ import org.mockito.junit.MockitoJUnitRunner
 
 import static com.springuni.auth.domain.model.user.ConfirmationTokenType.EMAIL
 import static com.springuni.auth.domain.model.user.ConfirmationTokenType.PASSWORD_RESET
-import static UserEventType.*
+import static com.springuni.auth.domain.model.userevent.UserEventType.*
 import static org.hamcrest.CoreMatchers.hasItem
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.junit.Assert.*
+import static org.mockito.ArgumentMatchers.*
 import static org.mockito.Mockito.*
 
 /**
