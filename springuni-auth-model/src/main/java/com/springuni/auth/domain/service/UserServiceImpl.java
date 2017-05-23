@@ -316,12 +316,24 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void signup(User user, String rawPassword) throws InvalidEmailException {
+  public void signup(User user, String rawPassword)
+      throws InvalidEmailException, EmailIsAlreadyTakenException,
+      ScreenNameIsAlreadyTakenException {
+
     Objects.requireNonNull(user, "user");
     Objects.requireNonNull(rawPassword, "rawPassword");
 
-    if (!Validator.isEmail(user.getEmail())) {
+    String email = user.getEmail();
+    if (!Validator.isEmail(email)) {
       throw new InvalidEmailException();
+    }
+
+    if (findUser(email).isPresent()) {
+      throw new EmailIsAlreadyTakenException();
+    }
+
+    if (findUser(user.getScreenName()).isPresent()) {
+      throw new ScreenNameIsAlreadyTakenException();
     }
 
     Password password = passwordEncryptor.ecrypt(rawPassword);
