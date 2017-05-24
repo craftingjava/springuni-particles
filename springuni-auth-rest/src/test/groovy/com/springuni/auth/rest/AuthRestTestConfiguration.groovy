@@ -14,11 +14,6 @@ import static org.mockito.Mockito.mock
 class AuthRestTestConfiguration extends AuthRestConfiguration {
 
   @Bean
-  UserMapper userMapper() {
-    return mock(UserMapper)
-  }
-
-  @Bean
   UserService userService() {
     return mock(UserService)
   }

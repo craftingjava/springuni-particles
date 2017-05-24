@@ -24,6 +24,7 @@ import com.springuni.auth.domain.service.UserService;
 import com.springuni.auth.rest.user.UserController;
 
 import com.springuni.auth.rest.user.UserMapper;
+import com.springuni.auth.rest.user.UserMapperImpl;
 import com.springuni.commons.rest.RestConfigurationSupport;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,6 +46,11 @@ public class AuthRestConfiguration extends RestConfigurationSupport {
   @Bean
   public UserController userController(UserMapper userMapper, UserService userService) {
     return new UserController(userMapper, userService);
+  }
+
+  @Bean
+  public UserMapper userMapper() {
+    return new UserMapperImpl();
   }
 
 }
