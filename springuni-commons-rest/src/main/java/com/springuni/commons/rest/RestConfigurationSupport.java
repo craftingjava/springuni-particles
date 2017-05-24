@@ -5,7 +5,6 @@ import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
-import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -27,14 +26,6 @@ public class RestConfigurationSupport extends WebMvcConfigurationSupport {
   @Bean
   public Object controllerAdvice() {
     return createControllerAdvice();
-  }
-
-  @Bean
-  public ModelMapper modelMapper() {
-    ModelMapper modelMapper = new ModelMapper();
-    customizeModelMapper(modelMapper);
-    modelMapper.validate();
-    return modelMapper;
   }
 
   @Bean
@@ -69,9 +60,6 @@ public class RestConfigurationSupport extends WebMvcConfigurationSupport {
 
   protected Object createDefaultHandler() {
     return new DefaultController();
-  }
-
-  protected void customizeModelMapper(ModelMapper modelMapper) {
   }
 
   protected void customizeObjectMapper(ObjectMapper objectMapper) {

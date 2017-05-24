@@ -23,10 +23,8 @@ import com.springuni.auth.domain.service.UserService;
 
 import com.springuni.auth.rest.user.UserController;
 
-import com.springuni.auth.rest.user.UserDtoMap;
-import com.springuni.auth.rest.user.UserMap;
+import com.springuni.auth.rest.user.UserMapper;
 import com.springuni.commons.rest.RestConfigurationSupport;
-import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -45,14 +43,8 @@ public class AuthRestConfiguration extends RestConfigurationSupport {
    * @return UserController
    */
   @Bean
-  public UserController userController(ModelMapper modelMapper, UserService userService) {
-    return new UserController(modelMapper, userService);
-  }
-
-  @Override
-  protected void customizeModelMapper(ModelMapper modelMapper) {
-    modelMapper.addMappings(new UserMap());
-    modelMapper.addMappings(new UserDtoMap());
+  public UserController userController(UserMapper userMapper, UserService userService) {
+    return new UserController(userMapper, userService);
   }
 
 }

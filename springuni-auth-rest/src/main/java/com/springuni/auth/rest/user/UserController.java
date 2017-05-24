@@ -23,7 +23,6 @@ import com.springuni.auth.domain.model.user.User;
 import com.springuni.auth.domain.service.UserService;
 import com.springuni.commons.domain.exceptions.ApplicationException;
 import java.util.List;
-import org.modelmapper.ModelMapper;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,18 +40,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController {
 
+  private final UserMapper userMapper;
   private final UserService userService;
-  private final ModelMapper modelMapper;
 
-  public UserController(ModelMapper modelMapper, UserService userService) {
-    this.modelMapper = modelMapper;
+  public UserController(UserMapper userMapper, UserService userService) {
+    this.userMapper = userMapper;
     this.userService = userService;
   }
 
   @GetMapping("/{userId}")
   public UserDto getUser(@PathVariable long userId) throws ApplicationException {
     User user = userService.getUser(userId);
-    return modelMapper.map(user, UserDto.class);
+    return userMapper.toUserDto(user);
   }
 
   @GetMapping("/")
@@ -63,7 +62,7 @@ public class UserController {
 
   @PostMapping
   public void createUser(@RequestBody @Validated UserDto userDto) throws ApplicationException {
-    User user = modelMapper.map(userDto, User.class);
+    User user = userMapper.toUser(userDto);
     userService.signup(user, userDto.getPassword());
   }
 
@@ -74,9 +73,9 @@ public class UserController {
 
   @PutMapping
   public UserDto updateUser(@RequestBody UserDto userDto) throws ApplicationException {
-    User user = modelMapper.map(userDto, User.class);
+    User user = userMapper.toUserWithoutEmailAndScreenName(userDto);
     user = userService.store(user);
-    return modelMapper.map(user, UserDto.class);
+    return userMapper.toUserDto(user);
   }
 
   @PutMapping("{userId}/confirm_email/{token}")
