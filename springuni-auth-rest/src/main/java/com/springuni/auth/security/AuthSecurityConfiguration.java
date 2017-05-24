@@ -37,13 +37,13 @@ public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
 
   @Override
   protected AuthenticationManager authenticationManager() throws Exception {
-    UserService userService = (UserService) getApplicationContext().getBean("userService");
+    UserService userService = lookup("userService");
     return new UsernamePasswordAuthenticationManager(userService);
   }
 
   @Override
   protected void customizeFilters(HttpSecurity http) {
-    LoginFilter loginFilter = (LoginFilter) getApplicationContext().getBean("loginFilter");
+    LoginFilter loginFilter = lookup("loginFilter");
     http.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
   }
 

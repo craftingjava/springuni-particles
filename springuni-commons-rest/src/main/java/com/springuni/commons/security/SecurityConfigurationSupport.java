@@ -4,7 +4,6 @@ import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javax.servlet.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -54,8 +53,7 @@ public class SecurityConfigurationSupport extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    AuthenticationEntryPoint authenticationEntryPoint =
-        (AuthenticationEntryPoint) getApplicationContext().getBean("authenticationEntryPoint");
+    AuthenticationEntryPoint authenticationEntryPoint = lookup("authenticationEntryPoint");
 
     http.csrf().disable()
         .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
@@ -69,21 +67,22 @@ public class SecurityConfigurationSupport extends WebSecurityConfigurerAdapter {
 
     http.authorizeRequests().anyRequest().authenticated();
 
+    JwtTokenService jwtTokenService = lookup("jwtTokenService");
+
     customizeFilters(
         http.addFilterBefore(
-            createJwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class));
-  }
-
-  protected Filter createJwtAuthenticationFilter() {
-    JwtTokenService jwtTokenService =
-        (JwtTokenService)getApplicationContext().getBean("jwtTokenService");
-    return new JwtAuthenticationFilter(jwtTokenService);
+            new JwtAuthenticationFilter(jwtTokenService),
+            UsernamePasswordAuthenticationFilter.class));
   }
 
   protected void customizeFilters(HttpSecurity http) {
   }
 
   protected void customizeRequestAuthorization(HttpSecurity http) throws Exception {
+  }
+
+  protected <T> T lookup(String beanName) {
+    return (T) getApplicationContext().getBean(beanName);
   }
 
 }
