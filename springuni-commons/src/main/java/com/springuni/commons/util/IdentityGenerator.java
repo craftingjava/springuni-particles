@@ -19,14 +19,12 @@
 
 package com.springuni.commons.util;
 
+import static com.springuni.commons.util.RandomUtil.nextInt;
 import static java.time.ZoneOffset.UTC;
 import static java.time.temporal.ChronoUnit.MILLIS;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,15 +57,10 @@ public final class IdentityGenerator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(IdentityGenerator.class);
 
-  private static final ThreadLocal<Random> THREAD_LOCAL_RANDOM;
   private static final ThreadLocal<Serial> THREAD_LOCAL_SERIAL;
 
   static {
-    THREAD_LOCAL_RANDOM = ThreadLocal.withInitial(IdentityGenerator::createSecureRandom);
-    THREAD_LOCAL_SERIAL = ThreadLocal.withInitial(() -> {
-      Random random = THREAD_LOCAL_RANDOM.get();
-      return new Serial(random.nextInt(), random.nextInt());
-    });
+    THREAD_LOCAL_SERIAL = ThreadLocal.withInitial(() -> new Serial(nextInt(), nextInt()));
   }
 
   private IdentityGenerator() {
@@ -112,15 +105,6 @@ public final class IdentityGenerator {
     long time = MILLIS.between(EPOCH, Instant.now());
     int serial = THREAD_LOCAL_SERIAL.get().increment();
     return doGenerate(shardId, time, serial);
-  }
-
-  static Random createSecureRandom() {
-    try {
-      return SecureRandom.getInstanceStrong();
-    } catch (NoSuchAlgorithmException nae) {
-      LOGGER.warn("Couldn't create strong secure random generator; reason: {}.", nae.getMessage());
-      return new SecureRandom();
-    }
   }
 
   static long doGenerate(byte shardId, long time, int serial) {
