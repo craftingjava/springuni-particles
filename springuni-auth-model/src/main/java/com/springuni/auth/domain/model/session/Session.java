@@ -28,6 +28,7 @@ import com.springuni.commons.util.DateTimeUtil;
 import java.time.LocalDateTime;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -36,6 +37,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
+@NoArgsConstructor
 public class Session implements Entity<Long, Session> {
 
   public static final int DEFAULT_EXPIRATION_MINUTES = 30 * 24 * 60;

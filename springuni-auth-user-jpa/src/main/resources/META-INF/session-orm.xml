@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm
+        http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd" version="2.1">
+
+  <!-- Session -->
+  <entity class="com.springuni.auth.domain.model.session.Session" cacheable="true"
+    metadata-complete="true">
+    <table name="session_"/>
+    <named-query name="findBySessionIdQuery">
+      <query>
+        <![CDATA[
+          select s from Session s
+          where s.id = :sessionId
+          and s.deleted = false
+        ]]>
+      </query>
+    </named-query>
+    <named-query name="findByUserIdQuery">
+      <query>
+        <![CDATA[
+          select s from Session s
+          where s.userId = :userId
+          and s.deleted = false
+          and s.issuedAt <= :now
+          and s.expiresAt >= :now
+        ]]>
+      </query>
+    </named-query>
+    <entity-listeners>
+      <entity-listener class="com.springuni.commons.jpa.IdentityGeneratorListener"/>
+    </entity-listeners>
+    <attributes>
+      <id name="id"/>
+      <basic name="userId"/>
+      <basic name="value"/>
+      <basic name="expiresAt"/>
+      <basic name="issuedAt"/>
+      <basic name="lastUsedAt"/>
+      <basic name="removedAt"/>
+      <basic name="deleted"/>
+      <transient name="valid"/>
+    </attributes>
+  </entity>
+
+</entity-mappings>

@@ -1,6 +1,6 @@
 package com.springuni.auth.boot;
 
-import com.springuni.auth.domain.model.user.UserJpaRepositoryConfiguration;
+import com.springuni.auth.domain.model.AuthJpaRepositoryConfiguration;
 import com.springuni.auth.domain.service.UserServiceConfiguration;
 import com.springuni.auth.rest.AuthRestConfiguration;
 import com.springuni.auth.security.AuthSecurityConfiguration;
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Import;
 @SpringBootApplication
 @Configuration
 @Import({
-    UserJpaRepositoryConfiguration.class,
+    AuthJpaRepositoryConfiguration.class,
     UserServiceConfiguration.class,
     AuthRestConfiguration.class,
     AuthSecurityConfiguration.class

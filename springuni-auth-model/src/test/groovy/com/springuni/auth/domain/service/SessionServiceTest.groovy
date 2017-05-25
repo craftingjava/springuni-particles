@@ -49,7 +49,6 @@ class SessionServiceTest extends BaseServiceTest {
     when(sessionRepository.save(expiredSession)).thenReturn(expiredSession)
 
     when(sessionRepository.findById(NON_EXISTENT_SESSION_ID)).thenReturn(Optional.empty())
-    when(sessionRepository.delete(NON_EXISTENT_SESSION_ID)).thenThrow(NoSuchSessionException)
   }
 
   @Test

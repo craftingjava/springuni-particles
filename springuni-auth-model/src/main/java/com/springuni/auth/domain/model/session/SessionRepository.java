@@ -29,14 +29,6 @@ import java.util.Optional;
 public interface SessionRepository {
 
   /**
-   * Deletes the given user, provided that it exists.
-   *
-   * @param sessionId {@link Session}'s ID
-   * @throws NoSuchSessionException if the user doesn't exist
-   */
-  void delete(Long sessionId) throws NoSuchSessionException;
-
-  /**
    * Finds a session based on its ID.
    *
    * @param id ID

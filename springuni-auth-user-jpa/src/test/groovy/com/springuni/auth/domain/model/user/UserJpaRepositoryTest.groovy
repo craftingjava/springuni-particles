@@ -1,5 +1,6 @@
 package com.springuni.auth.domain.model.user
 
+import com.springuni.auth.domain.model.AuthJpaRepositoryTestConfiguration
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -15,7 +16,7 @@ import static org.junit.Assert.*
  * Created by lcsontos on 5/5/17.
  */
 @RunWith(SpringJUnit4ClassRunner)
-@ContextConfiguration(classes = [UserJpaRepositoryTestConfiguration])
+@ContextConfiguration(classes = [AuthJpaRepositoryTestConfiguration])
 @Transactional
 @Rollback
 class UserJpaRepositoryTest {

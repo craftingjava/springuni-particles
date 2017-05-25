@@ -1,5 +1,6 @@
-package com.springuni.auth.domain.model.user
+package com.springuni.auth.domain.model
 
+import com.springuni.auth.domain.model.AuthJpaRepositoryConfiguration
 import org.hibernate.cfg.AvailableSettings
 import org.springframework.context.annotation.Configuration
 
@@ -7,7 +8,7 @@ import org.springframework.context.annotation.Configuration
  * Created by lcsontos on 5/5/17.
  */
 @Configuration
-class UserJpaRepositoryTestConfiguration extends UserJpaRepositoryConfiguration {
+class AuthJpaRepositoryTestConfiguration extends AuthJpaRepositoryConfiguration {
 
   protected void customizeJpaPropertyMap(Map<String, String> jpaPropertyMap) {
     jpaPropertyMap.put(AvailableSettings.HBM2DDL_AUTO, "create")
