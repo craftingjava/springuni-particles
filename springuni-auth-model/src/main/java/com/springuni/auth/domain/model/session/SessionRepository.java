@@ -20,6 +20,7 @@
 package com.springuni.auth.domain.model.session;
 
 import com.springuni.auth.domain.model.session.exceptions.NoSuchSessionException;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -38,10 +39,18 @@ public interface SessionRepository {
   /**
    * Finds a session based on its ID.
    *
-   * @param sessionId ID
+   * @param id ID
    * @return a {@link Session}
    */
-  Optional<Session> findById(Long sessionId);
+  Optional<Session> findById(Long id);
+
+  /**
+   * Finds all the sessions belonging to the given User ID.
+   *
+   * @param userId ID
+   * @return a {@link Session}
+   */
+  List<Session> findByUserId(Long userId);
 
   /**
    * Stores the given session.

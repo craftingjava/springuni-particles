@@ -8,8 +8,6 @@ import com.springuni.auth.domain.model.user.User
 import com.springuni.auth.domain.model.user.UserRepository
 import com.springuni.auth.domain.model.user.exceptions.*
 import com.springuni.auth.domain.model.userevent.UserEvent
-import com.springuni.auth.domain.model.userevent.UserEventEmitter
-import com.springuni.auth.domain.model.userevent.UserEventType
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,7 +28,7 @@ import static org.mockito.Mockito.*
  * Created by lcsontos on 4/24/17.
  */
 @RunWith(MockitoJUnitRunner)
-class UserServiceTest {
+class UserServiceTest extends BaseServiceTest {
 
   static final NON_EXISTENT_USER_ID = 3L
   static final NON_EXISTENT_USER_EMAIL = "non-existent@springuni.com"
@@ -38,7 +36,6 @@ class UserServiceTest {
 
   @Mock PasswordChecker passwordChecker
   @Mock PasswordEncryptor passwordEncryptor
-  @Mock UserEventEmitter userEventEmitter
   @Mock UserRepository userRepository
 
   ConfirmationToken validEmailConfirmationToken
@@ -316,17 +313,6 @@ class UserServiceTest {
   @Test
   void testStore() {
 
-  }
-
-  private void assertEmittedUserEvent(UserEventType expectedUserEventType) {
-    UserEvent userEvent = captureEmittedUserEvent()
-    assertEquals(expectedUserEventType, userEvent.userEventType)
-  }
-
-  private UserEvent captureEmittedUserEvent() {
-    ArgumentCaptor<UserEvent> userEventCaptor = ArgumentCaptor.forClass(UserEvent)
-    verify(userEventEmitter).emit(userEventCaptor.capture())
-    return userEventCaptor.value
   }
 
   private User captureSavedUser() {

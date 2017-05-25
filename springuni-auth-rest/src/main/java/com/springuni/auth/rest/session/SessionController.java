@@ -60,7 +60,7 @@ public class SessionController {
 
   @DeleteMapping("/{sessionId}")
   public void logout(@PathVariable long sessionId) throws ApplicationException {
-    sessionService.logout(sessionId);
+    sessionService.logoutUser(sessionId);
   }
 
 }

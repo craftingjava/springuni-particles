@@ -22,6 +22,8 @@ package com.springuni.auth.domain.service;
 import com.springuni.auth.domain.model.session.Session;
 import com.springuni.auth.domain.model.session.exceptions.NoSuchSessionException;
 import com.springuni.auth.domain.model.user.User;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * {@link SessionService} takes care of issuing new sessions and checking existing ones.
@@ -29,35 +31,51 @@ import com.springuni.auth.domain.model.user.User;
 public interface SessionService {
 
   /**
+   * Creates a {@link Session} for the given {@link User}.
+   *
+   * @param userId a {@link User}'s ID
+   * @return a newly created session
+   */
+  Session createSession(long userId, String token);
+
+  /**
+   * Creates a {@link Session} for the given {@link User}, which is valid for {@code minutes}.
+   *
+   * @param userId a {@link User}'s ID
+   * @param minutes minutes to expire from now
+   * @return a newly created session
+   */
+  Session createSession(long userId, String token, int minutes);
+
+  /**
    * Gets the {@link Session} for the given ID.
    *
    * @return a {@link Session} if it exists.
    * @throws NoSuchSessionException when there is no such session for the given ID
    */
-  Session getSession(Long sessionId) throws NoSuchSessionException;
+  Optional<Session> findSession(Long id) throws NoSuchSessionException;
 
   /**
-   * Creates a {@link Session} for the given {@link User}.
+   * Gets the {@link Session} for the given ID.
    *
-   * @param user a {@link User}
-   * @return a newly created session
+   * @return a {@link Session} if it exists.
+   * @throws NoSuchSessionException when there is no such session for the given ID
    */
-  Session login(User user);
+  Session getSession(Long id) throws NoSuchSessionException;
 
   /**
-   * Creates a {@link Session} for the given {@link User}, which is valid for {@code minutes}.
+   * Logs the user out by invalidating all of its {@link Session}s.
    *
-   * @param user a {@link User}
-   * @param minutes minutes to expire from now
-   * @return a newly created session
+   * @param userId User ID
    */
-  Session login(User user, int minutes);
+  void logoutUser(Long userId) throws NoSuchSessionException;
 
   /**
-   * Logs the user out by invalidating its {@link Session}.
+   * Updates the {@link Session} for the given ID.
    *
-   * @param sessionId Session ID
+   * @throws NoSuchSessionException when there is no such session for the given ID
    */
-  void logout(Long sessionId) throws NoSuchSessionException;
+  void useSession(Long id, String value, LocalDateTime lastUsedAt)
+      throws NoSuchSessionException;
 
 }
