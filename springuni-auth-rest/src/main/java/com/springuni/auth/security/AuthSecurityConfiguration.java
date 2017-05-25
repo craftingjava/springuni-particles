@@ -1,6 +1,7 @@
 package com.springuni.auth.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springuni.auth.domain.model.session.SessionRepository;
 import com.springuni.auth.domain.service.UserService;
 import com.springuni.commons.security.SecurityConfigurationSupport;
 import org.springframework.context.annotation.Bean;
@@ -8,9 +9,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 /**
  * Created by lcsontos on 5/18/17.
@@ -45,6 +49,25 @@ public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
   protected void customizeFilters(HttpSecurity http) {
     LoginFilter loginFilter = lookup("loginFilter");
     http.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
+  }
+
+  @Override
+  protected void customizeRememberMe(HttpSecurity http) throws Exception {
+    UserService userService = lookup("userService");
+    UserDetailsService userDetailsService = new DelegatingUserService(userService);
+
+    SessionRepository sessionRepository = lookup("sessionRepository");
+    PersistentTokenRepository tokenRepository =
+        new DelegatingPersistentTokenRepository(sessionRepository);
+
+    RememberMeServices rememberMeServices =
+        new PersistentJwtTokenBasedRememberMeServices(
+            "SECRET", userDetailsService, tokenRepository);
+
+    http.rememberMe()
+        .userDetailsService(userDetailsService)
+        .tokenRepository(tokenRepository)
+        .rememberMeServices(rememberMeServices);
   }
 
   @Override

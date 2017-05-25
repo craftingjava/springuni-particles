@@ -73,9 +73,14 @@ public class SecurityConfigurationSupport extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(
             new JwtAuthenticationFilter(jwtTokenService),
             UsernamePasswordAuthenticationFilter.class));
+
+    customizeRememberMe(http);
   }
 
   protected void customizeFilters(HttpSecurity http) {
+  }
+
+  protected void customizeRememberMe(HttpSecurity http) throws Exception {
   }
 
   protected void customizeRequestAuthorization(HttpSecurity http) throws Exception {
