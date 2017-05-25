@@ -10,6 +10,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import java.util.Date;
 import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -76,6 +77,11 @@ public class PersistentJwtTokenBasedRememberMeServices extends
         .map(i -> i & 0xff)
         .mapToObj(Integer::toHexString)
         .collect(Collectors.joining());
+  }
+
+  @Override
+  protected boolean rememberMeRequested(HttpServletRequest request, String parameter) {
+    return super.rememberMeRequested(request, parameter);
   }
 
 }

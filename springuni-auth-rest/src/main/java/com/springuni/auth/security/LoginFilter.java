@@ -19,7 +19,6 @@
 
 package com.springuni.auth.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -38,28 +37,26 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
-  private static final String LOGIN_REQUEST_ATTRIBUTE = "login_request";
-
-  private final ObjectMapper objectMapper;
+  private final LoginRequestManager loginRequestManager;
 
   /**
    * Create a login filter.
    * @param filterProcessesUrl url to listen on
    * @param authenticationManager authentication manager
-   * @param objectMapper an ObjectMapper instance
+   * @param loginRequestManager a LoginRequestManager instance
    */
   public LoginFilter(
       String filterProcessesUrl, AuthenticationManager authenticationManager,
       AuthenticationSuccessHandler authenticationSuccessHandler,
       AuthenticationFailureHandler authenticationFailureHandler,
-      ObjectMapper objectMapper) {
+      LoginRequestManager loginRequestManager) {
 
     setFilterProcessesUrl(filterProcessesUrl);
     setAuthenticationManager(authenticationManager);
     setAuthenticationSuccessHandler(authenticationSuccessHandler);
     setAuthenticationFailureHandler(authenticationFailureHandler);
 
-    this.objectMapper = objectMapper;
+    this.loginRequestManager = loginRequestManager;
   }
 
   @Override
@@ -67,25 +64,27 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
       HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
     try {
-      LoginRequest loginRequest =
-          objectMapper.readValue(request.getInputStream(), LoginRequest.class);
-
-      request.setAttribute(LOGIN_REQUEST_ATTRIBUTE, loginRequest);
-
+      loginRequestManager.setLoginRequest(request);
       return super.attemptAuthentication(request, response);
-    } catch (IOException ioe) {
-      throw new InternalAuthenticationServiceException(ioe.getMessage(), ioe);
+    } catch (Exception e) {
+      throw new InternalAuthenticationServiceException(e.getMessage(), e);
     }
   }
 
   @Override
   protected String obtainUsername(HttpServletRequest request) {
-    return toLoginRequest(request).getUsername();
+    return loginRequestManager
+        .getLoginRequest(request)
+        .map(LoginRequest::getUsername)
+        .orElse("");
   }
 
   @Override
   protected String obtainPassword(HttpServletRequest request) {
-    return toLoginRequest(request).getPassword();
+    return loginRequestManager
+        .getLoginRequest(request)
+        .map(LoginRequest::getPassword)
+        .orElse("");
   }
 
   @Override
@@ -99,10 +98,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
       HttpServletResponse response, AuthenticationException failed)
       throws IOException, ServletException {
     super.unsuccessfulAuthentication(request, response, failed);
-  }
-
-  private LoginRequest toLoginRequest(HttpServletRequest request) {
-    return (LoginRequest)request.getAttribute(LOGIN_REQUEST_ATTRIBUTE);
   }
 
 }

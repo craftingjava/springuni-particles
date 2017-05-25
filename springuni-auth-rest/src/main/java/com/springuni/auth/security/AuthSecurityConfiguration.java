@@ -29,14 +29,20 @@ public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
   }
 
   @Bean
+  public LoginRequestManager loginRequestManager(ObjectMapper objectMapper) {
+    return new LoginRequestManager(objectMapper);
+  }
+
+  @Bean
   public LoginFilter loginFilter(
       AuthenticationManager authenticationManager,
       AuthenticationSuccessHandler authenticationSuccessHandler,
-      AuthenticationFailureHandler authenticationFailureHandler, ObjectMapper objectMapper) {
+      AuthenticationFailureHandler authenticationFailureHandler,
+      LoginRequestManager loginRequestManager) {
 
     return new LoginFilter(
         LOGIN_ENDPOINT, authenticationManager, authenticationSuccessHandler,
-        authenticationFailureHandler, objectMapper);
+        authenticationFailureHandler, loginRequestManager);
   }
 
   @Override
