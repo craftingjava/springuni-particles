@@ -29,11 +29,14 @@ public class PersistentJwtTokenBasedRememberMeServices extends
 
   public static final int DEFAULT_TOKEN_LENGTH = 32;
 
+  private final LoginRequestManager loginRequestManager;
+
   public PersistentJwtTokenBasedRememberMeServices(
       String key, UserDetailsService userDetailsService,
-      PersistentTokenRepository tokenRepository) {
+      PersistentTokenRepository tokenRepository, LoginRequestManager loginRequestManager) {
 
     super(key, userDetailsService, tokenRepository);
+    this.loginRequestManager = loginRequestManager;
   }
 
   @Override
@@ -81,7 +84,10 @@ public class PersistentJwtTokenBasedRememberMeServices extends
 
   @Override
   protected boolean rememberMeRequested(HttpServletRequest request, String parameter) {
-    return super.rememberMeRequested(request, parameter);
+    return loginRequestManager
+        .getLoginRequest(request)
+        .map(LoginRequest::isRememberMe)
+        .orElse(false);
   }
 
 }

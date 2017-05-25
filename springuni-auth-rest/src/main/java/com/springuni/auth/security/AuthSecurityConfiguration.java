@@ -66,9 +66,10 @@ public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
     PersistentTokenRepository tokenRepository =
         new DelegatingPersistentTokenRepository(sessionRepository);
 
+    LoginRequestManager loginRequestManager = lookup("loginRequestManager");
     RememberMeServices rememberMeServices =
         new PersistentJwtTokenBasedRememberMeServices(
-            "SECRET", userDetailsService, tokenRepository);
+            "SECRET", userDetailsService, tokenRepository, loginRequestManager);
 
     http.rememberMe()
         .userDetailsService(userDetailsService)
