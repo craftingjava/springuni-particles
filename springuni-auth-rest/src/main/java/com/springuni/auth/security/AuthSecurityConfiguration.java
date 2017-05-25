@@ -10,6 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.RememberMeServices;
@@ -34,15 +35,41 @@ public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
   }
 
   @Bean
-  public LoginFilter loginFilter(
+  public AbstractAuthenticationProcessingFilter loginFilter(
       AuthenticationManager authenticationManager,
       AuthenticationSuccessHandler authenticationSuccessHandler,
       AuthenticationFailureHandler authenticationFailureHandler,
+      LoginRequestManager loginRequestManager,
+      RememberMeServices rememberMeServices) {
+
+    AbstractAuthenticationProcessingFilter loginFilter = new LoginFilter(loginRequestManager);
+
+    loginFilter.setFilterProcessesUrl(LOGIN_ENDPOINT);
+    loginFilter.setAuthenticationManager(authenticationManager);
+    loginFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
+    loginFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
+    loginFilter.setRememberMeServices(rememberMeServices);
+
+    return loginFilter;
+  }
+
+  @Bean
+  public UserDetailsService userDetailsService(UserService userService) {
+    return new DelegatingUserService(userService);
+  }
+
+  @Bean
+  public PersistentTokenRepository persistentTokenRepository(SessionService sessionService) {
+    return new DelegatingPersistentTokenRepository(sessionService);
+  }
+
+  @Bean
+  public RememberMeServices rememberMeServices(
+      UserDetailsService userDetailsService, PersistentTokenRepository persistentTokenRepository,
       LoginRequestManager loginRequestManager) {
 
-    return new LoginFilter(
-        LOGIN_ENDPOINT, authenticationManager, authenticationSuccessHandler,
-        authenticationFailureHandler, loginRequestManager);
+    return new PersistentJwtTokenBasedRememberMeServices(
+        "SECRET", userDetailsService, persistentTokenRepository, loginRequestManager);
   }
 
   @Override
@@ -59,21 +86,13 @@ public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
 
   @Override
   protected void customizeRememberMe(HttpSecurity http) throws Exception {
-    UserService userService = lookup("userService");
-    UserDetailsService userDetailsService = new DelegatingUserService(userService);
-
-    SessionService sessionService = lookup("sessionService");
-    PersistentTokenRepository tokenRepository =
-        new DelegatingPersistentTokenRepository(sessionService);
-
-    LoginRequestManager loginRequestManager = lookup("loginRequestManager");
-    RememberMeServices rememberMeServices =
-        new PersistentJwtTokenBasedRememberMeServices(
-            "SECRET", userDetailsService, tokenRepository, loginRequestManager);
+    UserDetailsService userDetailsService = lookup("userDetailsService");
+    PersistentTokenRepository persistentTokenRepository = lookup("persistentTokenRepository");
+    RememberMeServices rememberMeServices = lookup("rememberMeServices");
 
     http.rememberMe()
         .userDetailsService(userDetailsService)
-        .tokenRepository(tokenRepository)
+        .tokenRepository(persistentTokenRepository)
         .rememberMeServices(rememberMeServices);
   }
 
