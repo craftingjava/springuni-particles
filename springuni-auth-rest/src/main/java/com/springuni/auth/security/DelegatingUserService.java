@@ -19,11 +19,10 @@ public class DelegatingUserService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     Long userId = Long.valueOf(username);
+    UsernameNotFoundException usernameNotFoundException = new UsernameNotFoundException(username);
     return userService.findUser(userId)
         .map(DelegatingUser::new)
-        .orElseThrow(() -> {
-          throw new UsernameNotFoundException(username);
-        });
+        .orElseThrow(() -> usernameNotFoundException);
   }
 
 }
