@@ -75,8 +75,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
       return super.attemptAuthentication(request, response);
     } catch (IOException ioe) {
       throw new InternalAuthenticationServiceException(ioe.getMessage(), ioe);
-    } finally {
-      request.removeAttribute(LOGIN_REQUEST_ATTRIBUTE);
     }
   }
 
