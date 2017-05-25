@@ -51,9 +51,8 @@ public interface SessionService {
    * Gets the {@link Session} for the given ID.
    *
    * @return a {@link Session} if it exists.
-   * @throws NoSuchSessionException when there is no such session for the given ID
    */
-  Optional<Session> findSession(Long id) throws NoSuchSessionException;
+  Optional<Session> findSession(Long id);
 
   /**
    * Gets the {@link Session} for the given ID.
@@ -68,7 +67,7 @@ public interface SessionService {
    *
    * @param userId User ID
    */
-  void logoutUser(Long userId) throws NoSuchSessionException;
+  void logoutUser(Long userId);
 
   /**
    * Updates the {@link Session} for the given ID.

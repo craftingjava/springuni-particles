@@ -1,7 +1,7 @@
 package com.springuni.auth.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.springuni.auth.domain.model.session.SessionRepository;
+import com.springuni.auth.domain.service.SessionService;
 import com.springuni.auth.domain.service.UserService;
 import com.springuni.commons.security.SecurityConfigurationSupport;
 import org.springframework.context.annotation.Bean;
@@ -62,9 +62,9 @@ public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
     UserService userService = lookup("userService");
     UserDetailsService userDetailsService = new DelegatingUserService(userService);
 
-    SessionRepository sessionRepository = lookup("sessionRepository");
+    SessionService sessionService = lookup("sessionService");
     PersistentTokenRepository tokenRepository =
-        new DelegatingPersistentTokenRepository(sessionRepository);
+        new DelegatingPersistentTokenRepository(sessionService);
 
     LoginRequestManager loginRequestManager = lookup("loginRequestManager");
     RememberMeServices rememberMeServices =

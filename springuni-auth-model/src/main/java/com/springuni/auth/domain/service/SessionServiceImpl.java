@@ -72,7 +72,7 @@ public class SessionServiceImpl implements SessionService {
   }
 
   @Override
-  public Optional<Session> findSession(Long id) throws NoSuchSessionException {
+  public Optional<Session> findSession(Long id) {
     Objects.requireNonNull(id);
     return sessionRepository.findById(id).map(session -> (session.isValid() ? session : null));
   }
@@ -83,7 +83,7 @@ public class SessionServiceImpl implements SessionService {
   }
 
   @Override
-  public void logoutUser(Long userId) throws NoSuchSessionException {
+  public void logoutUser(Long userId) {
     List<Long> deletedSessionIds = sessionRepository.findByUserId(userId)
         .stream()
         .peek(session -> session.setDeleted(true))
