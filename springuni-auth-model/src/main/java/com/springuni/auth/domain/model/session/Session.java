@@ -45,7 +45,7 @@ public class Session implements Entity<Long, Session> {
   private Long id;
   private Long userId;
 
-  private String value;
+  private String token;
 
   private LocalDateTime expiresAt;
   private LocalDateTime issuedAt;
@@ -60,8 +60,8 @@ public class Session implements Entity<Long, Session> {
    * @param id Session ID
    * @param userId User ID
    */
-  public Session(Long id, Long userId) {
-    this(id, userId, DEFAULT_EXPIRATION_MINUTES);
+  public Session(Long id, Long userId, String token) {
+    this(id, userId, token, DEFAULT_EXPIRATION_MINUTES);
   }
 
   /**
@@ -69,11 +69,13 @@ public class Session implements Entity<Long, Session> {
    *
    * @param id Session ID
    * @param userId User ID
+   * @param token Token's token
    * @param minutes minutes to expire from time of issue
    */
-  public Session(Long id, Long userId, int minutes) {
+  public Session(Long id, Long userId, String token, int minutes) {
     this.id = id;
     this.userId = userId;
+    this.token = token;
     if (minutes == 0) {
       minutes = DEFAULT_EXPIRATION_MINUTES;
     }
@@ -86,12 +88,16 @@ public class Session implements Entity<Long, Session> {
    *
    * @param id Session ID
    * @param userId User ID
+   * @param token Token's token
    * @param expiresAt expire at
    * @param issuedAt issued at
    */
-  public Session(Long id, Long userId, LocalDateTime expiresAt, LocalDateTime issuedAt) {
+  public Session(
+      Long id, Long userId, String token, LocalDateTime expiresAt, LocalDateTime issuedAt) {
+
     this.id = id;
     this.userId = userId;
+    this.token = token;
     this.expiresAt = expiresAt;
     this.issuedAt = issuedAt;
   }
@@ -111,7 +117,7 @@ public class Session implements Entity<Long, Session> {
     return isValid(now);
   }
 
-  boolean isValid(LocalDateTime now) {
+  public boolean isValid(LocalDateTime now) {
     return expiresAt.isAfter(now) && !deleted;
   }
 

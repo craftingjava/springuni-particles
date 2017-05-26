@@ -61,7 +61,7 @@ public class DelegatingPersistentTokenRepository implements PersistentTokenRepos
     String username = String.valueOf(session.getUserId());
     String series = String.valueOf(session.getId());
     return new PersistentRememberMeToken(
-        username, series, session.getValue(), toDate(session.getLastUsedAt()));
+        username, series, session.getToken(), toDate(session.getLastUsedAt()));
   }
 
 }

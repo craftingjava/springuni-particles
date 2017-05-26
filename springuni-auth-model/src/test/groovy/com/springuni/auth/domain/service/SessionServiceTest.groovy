@@ -37,8 +37,8 @@ class SessionServiceTest extends BaseServiceTest {
 
   @Before
   void before() {
-    validSession = new Session(1L, 1L, EXPIRES_AT, ISSUED_AT)
-    expiredSession = new Session(2L, 2L, EXPIRED_AT, ISSUED_AT)
+    validSession = new Session(1L, 1L, "123", EXPIRES_AT, ISSUED_AT)
+    expiredSession = new Session(2L, 2L, "1234", EXPIRED_AT, ISSUED_AT)
 
     sessionService = new SessionServiceImpl(sessionRepository, userEventEmitter)
 

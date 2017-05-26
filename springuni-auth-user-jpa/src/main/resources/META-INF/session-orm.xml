@@ -34,7 +34,7 @@
     <attributes>
       <id name="id"/>
       <basic name="userId"/>
-      <basic name="value"/>
+      <basic name="token"/>
       <basic name="expiresAt"/>
       <basic name="issuedAt"/>
       <basic name="lastUsedAt"/>

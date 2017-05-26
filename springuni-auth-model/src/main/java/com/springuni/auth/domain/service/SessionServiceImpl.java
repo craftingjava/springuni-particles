@@ -62,7 +62,7 @@ public class SessionServiceImpl implements SessionService {
   public Session createSession(long userId, String token, int minutes) {
     Objects.requireNonNull(userId);
     Long id = IdentityGenerator.generate();
-    Session session = new Session(id, userId, minutes);
+    Session session = new Session(id, userId, token, minutes);
     sessionRepository.save(session);
 
     LOGGER.info(
@@ -101,7 +101,7 @@ public class SessionServiceImpl implements SessionService {
       throws NoSuchSessionException {
 
     Session session = getSession(id);
-    session.setValue(value);
+    session.setToken(value);
     session.setLastUsedAt(lastUsedAt);
 
     sessionRepository.save(session);
