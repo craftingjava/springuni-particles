@@ -24,8 +24,10 @@ import static java.time.ZoneOffset.UTC;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.temporal.TemporalUnit;
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * Utility methods for date & time manipulations.
@@ -61,7 +63,10 @@ public final class DateTimeUtil {
    * @return a date time in UTC
    */
   public static Date toDate(LocalDateTime localDateTime) {
-    return Date.from(localDateTime.toInstant(UTC));
+    return Optional.ofNullable(localDateTime)
+        .map(ldt -> ldt.toInstant(UTC))
+        .map(Date::from)
+        .orElse(null);
   }
 
   /**
@@ -70,7 +75,11 @@ public final class DateTimeUtil {
    * @return a date time in UTC
    */
   public static LocalDateTime toLocalDateTime(Date date) {
-    return date.toInstant().atOffset(UTC).toLocalDateTime();
+    return Optional.ofNullable(date)
+        .map(Date::toInstant)
+        .map(i -> i.atOffset(UTC))
+        .map(OffsetDateTime::toLocalDateTime)
+        .orElse(null);
   }
 
 }
