@@ -75,7 +75,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       return null;
     }
 
-    if (StringUtils.substringMatch(authorizationHeader, 0, TOKEN_PREFIX)) {
+    if (!StringUtils.substringMatch(authorizationHeader, 0, TOKEN_PREFIX)) {
       LOGGER.debug("Token prefix {} in Authorization header was not found.", TOKEN_PREFIX);
       return null;
     }
