@@ -48,7 +48,7 @@ public class SecurityConfigurationSupport extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    super.configure(auth);
+    customizeAuthenticationManager(auth);
   }
 
   @Override
@@ -75,6 +75,9 @@ public class SecurityConfigurationSupport extends WebSecurityConfigurerAdapter {
             UsernamePasswordAuthenticationFilter.class));
 
     customizeRememberMe(http);
+  }
+
+  protected void customizeAuthenticationManager(AuthenticationManagerBuilder auth) {
   }
 
   protected void customizeFilters(HttpSecurity http) {

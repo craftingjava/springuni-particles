@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -27,6 +28,11 @@ public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
   @Override
   public AuthenticationManager authenticationManagerBean() throws Exception {
     return super.authenticationManagerBean();
+  }
+
+  @Bean
+  public AuthenticationProvider usernamePasswordAuthenticationProvider(UserService userService) {
+    return new UsernamePasswordAuthenticationProvider(userService);
   }
 
   @Bean
@@ -72,11 +78,6 @@ public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
         "SECRET", userDetailsService, persistentTokenRepository, loginRequestManager);
   }
 
-  @Override
-  protected AuthenticationManager authenticationManager() throws Exception {
-    UserService userService = lookup("userService");
-    return new UsernamePasswordAuthenticationManager(userService);
-  }
 
   @Override
   protected void customizeFilters(HttpSecurity http) {

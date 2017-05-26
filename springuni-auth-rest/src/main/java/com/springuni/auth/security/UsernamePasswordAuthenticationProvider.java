@@ -25,7 +25,7 @@ import com.springuni.auth.domain.model.user.exceptions.UnconfirmedUserException;
 import com.springuni.auth.domain.service.UserService;
 import java.util.Collection;
 import java.util.stream.Collectors;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,13 +35,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
- * Authentication manager using {@link UserService} as a back-end to perform login.
+ * Authentication provider using {@link UserService} as a back-end to perform login.
  */
-public class UsernamePasswordAuthenticationManager implements AuthenticationManager {
+public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
 
   private final UserService userService;
 
-  public UsernamePasswordAuthenticationManager(UserService userService) {
+  public UsernamePasswordAuthenticationProvider(UserService userService) {
     this.userService = userService;
   }
 
@@ -64,6 +64,11 @@ public class UsernamePasswordAuthenticationManager implements AuthenticationMana
     } catch (UnconfirmedUserException e) {
       throw new DisabledException(e.getMessage(), e);
     }
+  }
+
+  @Override
+  public boolean supports(Class<?> authentication) {
+    return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
   }
 
 }
