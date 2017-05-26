@@ -33,19 +33,21 @@ public interface SessionService {
   /**
    * Creates a {@link Session} for the given {@link User}.
    *
+   * @param sessionId a {@link Session}'s ID
    * @param userId a {@link User}'s ID
    * @return a newly created session
    */
-  Session createSession(long userId, String token);
+  Session createSession(long sessionId, long userId, String token);
 
   /**
    * Creates a {@link Session} for the given {@link User}, which is valid for {@code minutes}.
    *
+   * @param sessionId a {@link Session}'s ID
    * @param userId a {@link User}'s ID
    * @param minutes minutes to expire from now
    * @return a newly created session
    */
-  Session createSession(long userId, String token, int minutes);
+  Session createSession(long sessionId, long userId, String token, int minutes);
 
   /**
    * Gets the {@link Session} for the given ID.

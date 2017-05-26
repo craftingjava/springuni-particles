@@ -54,15 +54,14 @@ public class SessionServiceImpl implements SessionService {
   }
 
   @Override
-  public Session createSession(long userId, String token) {
-    return createSession(userId, token, 0);
+  public Session createSession(long sessionId, long userId, String token) {
+    return createSession(sessionId, userId, token, 0);
   }
 
   @Override
-  public Session createSession(long userId, String token, int minutes) {
+  public Session createSession(long sessionId, long userId, String token, int minutes) {
     Objects.requireNonNull(userId);
-    Long id = IdentityGenerator.generate();
-    Session session = new Session(id, userId, token, minutes);
+    Session session = new Session(sessionId, userId, token, minutes);
     sessionRepository.save(session);
 
     LOGGER.info(

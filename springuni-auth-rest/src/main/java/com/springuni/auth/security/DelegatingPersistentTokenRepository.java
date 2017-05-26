@@ -28,8 +28,9 @@ public class DelegatingPersistentTokenRepository implements PersistentTokenRepos
 
   @Override
   public void createNewToken(PersistentRememberMeToken token) {
+    Long sessionId = Long.valueOf(token.getSeries());
     Long userId = Long.valueOf(token.getUsername());
-    sessionService.createSession(userId, token.getTokenValue());
+    sessionService.createSession(sessionId, userId, token.getTokenValue());
   }
 
   @Override

@@ -53,8 +53,9 @@ class SessionServiceTest extends BaseServiceTest {
 
   @Test
   void testCreateSession() {
-    Session session = sessionService.createSession(1L, "1234")
+    Session session = sessionService.createSession(1L, 1L, "1234")
     assertNotNull(session)
+    assertEquals(1L, session.getId())
     assertEquals(1L, session.getUserId())
   }
 
