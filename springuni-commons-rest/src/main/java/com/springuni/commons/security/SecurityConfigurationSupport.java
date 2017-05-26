@@ -31,9 +31,8 @@ public class SecurityConfigurationSupport extends WebSecurityConfigurerAdapter {
 
   @Bean
   public AuthenticationSuccessHandler authenticationSuccessHandler(
-      JwtTokenService jwtTokenService, ObjectMapper objectMapper) {
-
-    return new DefaultAuthenticationSuccessHandler(jwtTokenService, objectMapper);
+      JwtTokenService jwtTokenService) {
+    return new DefaultAuthenticationSuccessHandler(jwtTokenService);
   }
 
   @Bean

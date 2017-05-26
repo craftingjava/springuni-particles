@@ -19,9 +19,6 @@
 
 package com.springuni.commons.security;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,15 +31,12 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class DefaultAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
   private static final int ONE_DAY_MINUTES = 24 * 60;
+  private static final String X_SET_AUTHORIZATION_BEARER_HEADER = "X-Set-Authorization-Bearer";
 
   private final JwtTokenService jwtTokenService;
-  private final ObjectMapper objectMapper;
 
-  public DefaultAuthenticationSuccessHandler(
-      JwtTokenService jwtTokenService, ObjectMapper objectMapper) {
-
+  public DefaultAuthenticationSuccessHandler(JwtTokenService jwtTokenService) {
     this.jwtTokenService = jwtTokenService;
-    this.objectMapper = objectMapper;
   }
 
   @Override
@@ -50,10 +44,8 @@ public class DefaultAuthenticationSuccessHandler implements AuthenticationSucces
       HttpServletRequest request, HttpServletResponse response, Authentication authentication)
       throws IOException {
 
-    response.setContentType(APPLICATION_JSON_VALUE);
-
     String jwtToken = jwtTokenService.createJwtToken(authentication, ONE_DAY_MINUTES);
-    objectMapper.writeValue(response.getWriter(), jwtToken);
+    response.setHeader(X_SET_AUTHORIZATION_BEARER_HEADER, jwtToken);
   }
 
 }
