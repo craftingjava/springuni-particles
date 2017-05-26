@@ -27,7 +27,7 @@ public class PersistentJwtTokenBasedRememberMeServices extends
   private static final Logger LOGGER =
       LoggerFactory.getLogger(PersistentJwtTokenBasedRememberMeServices.class);
 
-  public static final int DEFAULT_TOKEN_LENGTH = 32;
+  public static final int DEFAULT_TOKEN_LENGTH = 16;
 
   private final LoginRequestManager loginRequestManager;
 
@@ -77,8 +77,7 @@ public class PersistentJwtTokenBasedRememberMeServices extends
   @Override
   protected String generateTokenData() {
     return RandomUtil.ints(DEFAULT_TOKEN_LENGTH)
-        .map(i -> i & 0xff)
-        .mapToObj(Integer::toHexString)
+        .mapToObj(i -> String.format("%04x", i))
         .collect(Collectors.joining());
   }
 
