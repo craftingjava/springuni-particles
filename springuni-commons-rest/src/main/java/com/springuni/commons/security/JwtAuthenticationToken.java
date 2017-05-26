@@ -23,6 +23,7 @@ import io.jsonwebtoken.Claims;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -73,7 +74,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     Date now = new Date();
     Date expiration = claims.getExpiration();
-    Date notBefore = claims.getNotBefore();
+    Date notBefore = Optional.ofNullable(claims.getNotBefore()).orElse(now);
     jwtAuthenticationToken.setAuthenticated(now.after(notBefore) && now.before(expiration));
 
     return jwtAuthenticationToken;
