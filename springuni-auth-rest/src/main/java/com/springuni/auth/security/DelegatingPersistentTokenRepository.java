@@ -6,7 +6,9 @@ import static com.springuni.commons.util.DateTimeUtil.toLocalDateTime;
 import com.springuni.auth.domain.model.session.Session;
 import com.springuni.auth.domain.model.session.exceptions.NoSuchSessionException;
 import com.springuni.auth.domain.service.SessionService;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
@@ -61,8 +63,10 @@ public class DelegatingPersistentTokenRepository implements PersistentTokenRepos
   private PersistentRememberMeToken toPersistentRememberMeToken(Session session) {
     String username = String.valueOf(session.getUserId());
     String series = String.valueOf(session.getId());
+    LocalDateTime lastUsedAt =
+        Optional.ofNullable(session.getLastUsedAt()).orElseGet(session::getIssuedAt);
     return new PersistentRememberMeToken(
-        username, series, session.getToken(), toDate(session.getLastUsedAt()));
+        username, series, session.getToken(), toDate(lastUsedAt));
   }
 
 }
