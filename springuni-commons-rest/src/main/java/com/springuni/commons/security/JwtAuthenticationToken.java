@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.util.StringUtils;
 
 /**
  * Created by lcsontos on 5/17/17.
@@ -63,6 +64,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     Collection<GrantedAuthority> authorities =
         Arrays.stream(String.valueOf(claims.get(AUTHORITIES)).split(","))
             .map(String::trim)
+            .filter(StringUtils::hasText)
             .map(String::toUpperCase)
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toSet());
