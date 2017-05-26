@@ -48,6 +48,7 @@ public class SecurityConfigurationSupport extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.authenticationProvider(new JwtAuthenticationProvider());
     customizeAuthenticationManager(auth);
   }
 
