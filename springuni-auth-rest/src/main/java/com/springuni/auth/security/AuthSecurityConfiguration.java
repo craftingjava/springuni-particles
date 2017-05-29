@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 /**
@@ -71,12 +72,14 @@ public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
   }
 
   @Bean
-  public RememberMeServices rememberMeServices(
+  public AbstractRememberMeServices rememberMeServices(
       UserDetailsService userDetailsService, PersistentTokenRepository persistentTokenRepository,
       LoginRequestManager loginRequestManager) {
 
+    String secretKey = getRememberMeTokenSecretKey().orElseThrow(IllegalStateException::new);
+
     return new PersistentJwtTokenBasedRememberMeServices(
-        "SECRET", userDetailsService, persistentTokenRepository, loginRequestManager);
+        secretKey, userDetailsService, persistentTokenRepository, loginRequestManager);
   }
 
   @Override
@@ -96,12 +99,13 @@ public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
   protected void customizeRememberMe(HttpSecurity http) throws Exception {
     UserDetailsService userDetailsService = lookup("userDetailsService");
     PersistentTokenRepository persistentTokenRepository = lookup("persistentTokenRepository");
-    RememberMeServices rememberMeServices = lookup("rememberMeServices");
+    AbstractRememberMeServices rememberMeServices = lookup("rememberMeServices");
 
     http.rememberMe()
         .userDetailsService(userDetailsService)
         .tokenRepository(persistentTokenRepository)
-        .rememberMeServices(rememberMeServices);
+        .rememberMeServices(rememberMeServices)
+        .key(rememberMeServices.getKey());
   }
 
   @Override

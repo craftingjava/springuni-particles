@@ -29,6 +29,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import java.util.Base64;
 import java.util.Date;
 import java.util.stream.Collectors;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -45,7 +46,11 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 
   private static final String AUTHORITIES = "authorities";
 
-  static final String SECRET = "ThisIsASecret";
+  private final byte[] secretkey;
+
+  public JwtTokenServiceImpl(String secretkey) {
+    this.secretkey = Base64.getDecoder().decode(secretkey);
+  }
 
   @Override
   public String createJwtToken(Authentication authentication, int minutes) {
@@ -65,7 +70,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 
     return Jwts.builder()
         .setClaims(claims)
-        .signWith(HS512, SECRET)
+        .signWith(HS512, secretkey)
         .compact();
   }
 
@@ -73,7 +78,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
   public Authentication parseJwtToken(String jwtToken) throws AuthenticationException {
     try {
       Claims claims = Jwts.parser()
-            .setSigningKey(SECRET)
+            .setSigningKey(secretkey)
             .parseClaimsJws(jwtToken)
             .getBody();
 

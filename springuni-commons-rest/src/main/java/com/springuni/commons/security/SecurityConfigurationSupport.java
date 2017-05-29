@@ -4,8 +4,11 @@ import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Optional;
+import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,9 +23,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 @EnableWebSecurity
 @Configuration
-public class SecurityConfigurationSupport extends WebSecurityConfigurerAdapter {
+public class SecurityConfigurationSupport
+    extends WebSecurityConfigurerAdapter implements EnvironmentAware {
 
   protected static final String LOGIN_ENDPOINT = "/sessions";
+
+  private static final String JWT_TOKEN_SECRET_KEY = "JWT_TOKEN_SECRET_KEY";
+  private static final String REMEMBER_ME_TOKEN_SECRET_KEY = "REMEMBER_ME_TOKEN_SECRET_KEY";
+
+  private Environment environment;
 
   @Bean
   public AuthenticationEntryPoint authenticationEntryPoint(ObjectMapper objectMapper) {
@@ -42,7 +51,13 @@ public class SecurityConfigurationSupport extends WebSecurityConfigurerAdapter {
 
   @Bean
   public JwtTokenService jwtTokenService() {
-    return new JwtTokenServiceImpl();
+    String secretKey = getJwtTokenSecretKey().orElseThrow(IllegalStateException::new);
+    return new JwtTokenServiceImpl(secretKey);
+  }
+
+  @Override
+  public void setEnvironment(Environment environment) {
+    this.environment = environment;
   }
 
   @Override
@@ -87,6 +102,14 @@ public class SecurityConfigurationSupport extends WebSecurityConfigurerAdapter {
   }
 
   protected void customizeRequestAuthorization(HttpSecurity http) throws Exception {
+  }
+
+  protected Optional<String> getJwtTokenSecretKey() {
+    return Optional.ofNullable(environment.getProperty(JWT_TOKEN_SECRET_KEY));
+  }
+
+  protected Optional<String> getRememberMeTokenSecretKey() {
+    return Optional.ofNullable(environment.getProperty(REMEMBER_ME_TOKEN_SECRET_KEY));
   }
 
   protected <T> T lookup(String beanName) {
