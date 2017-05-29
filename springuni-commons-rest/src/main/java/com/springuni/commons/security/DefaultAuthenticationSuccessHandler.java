@@ -22,6 +22,8 @@ package com.springuni.commons.security;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -29,6 +31,9 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
  * Created by lcsontos on 5/17/17.
  */
 public class DefaultAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+
+  private static final Logger LOGGER =
+      LoggerFactory.getLogger(DefaultAuthenticationSuccessHandler.class);
 
   private static final int ONE_DAY_MINUTES = 24 * 60;
   private static final String X_SET_AUTHORIZATION_BEARER_HEADER = "X-Set-Authorization-Bearer";
@@ -43,6 +48,11 @@ public class DefaultAuthenticationSuccessHandler implements AuthenticationSucces
   public void onAuthenticationSuccess(
       HttpServletRequest request, HttpServletResponse response, Authentication authentication)
       throws IOException {
+
+    if (response.containsHeader(X_SET_AUTHORIZATION_BEARER_HEADER)) {
+      LOGGER.debug("{} has already been set.", X_SET_AUTHORIZATION_BEARER_HEADER);
+      return;
+    }
 
     String jwtToken = jwtTokenService.createJwtToken(authentication, ONE_DAY_MINUTES);
     response.setHeader(X_SET_AUTHORIZATION_BEARER_HEADER, jwtToken);

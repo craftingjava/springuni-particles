@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 
 /**
  * Created by lcsontos on 5/18/17.
@@ -72,7 +73,20 @@ public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
   }
 
   @Bean
-  public AbstractRememberMeServices rememberMeServices(
+  public RememberMeAuthenticationFilter rememberMeAuthenticationFilter(
+      AuthenticationManager authenticationManager, RememberMeServices rememberMeServices,
+      AuthenticationSuccessHandler authenticationSuccessHandler) {
+
+    RememberMeAuthenticationFilter rememberMeAuthenticationFilter =
+        new ProceedingRememberMeAuthenticationFilter(authenticationManager, rememberMeServices);
+
+    rememberMeAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
+
+    return rememberMeAuthenticationFilter;
+  }
+
+  @Bean
+  public RememberMeServices rememberMeServices(
       UserDetailsService userDetailsService, PersistentTokenRepository persistentTokenRepository,
       LoginRequestManager loginRequestManager) {
 
@@ -100,12 +114,16 @@ public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
     UserDetailsService userDetailsService = lookup("userDetailsService");
     PersistentTokenRepository persistentTokenRepository = lookup("persistentTokenRepository");
     AbstractRememberMeServices rememberMeServices = lookup("rememberMeServices");
+    RememberMeAuthenticationFilter rememberMeAuthenticationFilter =
+        lookup("rememberMeAuthenticationFilter");
 
     http.rememberMe()
         .userDetailsService(userDetailsService)
         .tokenRepository(persistentTokenRepository)
         .rememberMeServices(rememberMeServices)
-        .key(rememberMeServices.getKey());
+        .key(rememberMeServices.getKey())
+        .and()
+        .addFilterAt(rememberMeAuthenticationFilter, RememberMeAuthenticationFilter.class);
   }
 
   @Override
