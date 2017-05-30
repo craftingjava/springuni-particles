@@ -26,7 +26,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfigurationSupport
     extends WebSecurityConfigurerAdapter implements EnvironmentAware {
 
-  protected static final String LOGIN_ENDPOINT = "/sessions";
+  protected static final String LOGIN_ENDPOINT = "/auth/login";
+  protected static final String LOGOUT_ENDPOINT = "/auth/logout";
 
   private static final String JWT_TOKEN_SECRET_KEY = "JWT_TOKEN_SECRET_KEY";
   private static final String REMEMBER_ME_TOKEN_SECRET_KEY = "REMEMBER_ME_TOKEN_SECRET_KEY";

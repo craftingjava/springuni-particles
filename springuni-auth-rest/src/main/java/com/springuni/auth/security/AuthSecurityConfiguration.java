@@ -123,6 +123,9 @@ public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
         .rememberMeServices(rememberMeServices)
         .key(rememberMeServices.getKey())
         .and()
+        .logout()
+        .logoutUrl(LOGOUT_ENDPOINT)
+        .and()
         .addFilterAt(rememberMeAuthenticationFilter, RememberMeAuthenticationFilter.class);
   }
 
