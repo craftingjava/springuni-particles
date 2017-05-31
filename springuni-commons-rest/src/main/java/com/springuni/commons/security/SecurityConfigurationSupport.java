@@ -17,6 +17,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 /**
  * Created by lcsontos on 5/18/17.
@@ -86,9 +87,7 @@ public class SecurityConfigurationSupport
     JwtTokenService jwtTokenService = lookup("jwtTokenService");
 
     customizeFilters(
-        http.addFilterBefore(
-            new JwtAuthenticationFilter(jwtTokenService),
-            UsernamePasswordAuthenticationFilter.class));
+        http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenService), LogoutFilter.class));
 
     customizeRememberMe(http);
   }
