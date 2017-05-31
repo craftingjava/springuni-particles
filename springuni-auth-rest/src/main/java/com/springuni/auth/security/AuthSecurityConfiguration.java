@@ -39,21 +39,15 @@ public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
   }
 
   @Bean
-  public LoginRequestManager loginRequestManager(ObjectMapper objectMapper) {
-    return new LoginRequestManager(objectMapper);
-  }
-
-  @Bean
   public AbstractAuthenticationProcessingFilter loginFilter(
-      AuthenticationManager authenticationManager,
+      ObjectMapper objectMapper, AuthenticationManager authenticationManager,
       AuthenticationSuccessHandler authenticationSuccessHandler,
       AuthenticationFailureHandler authenticationFailureHandler,
-      LoginRequestManager loginRequestManager,
       RememberMeServices rememberMeServices) {
 
-    AbstractAuthenticationProcessingFilter loginFilter = new LoginFilter(loginRequestManager);
+    AbstractAuthenticationProcessingFilter loginFilter =
+        new LoginFilter(LOGIN_ENDPOINT, objectMapper);
 
-    loginFilter.setFilterProcessesUrl(LOGIN_ENDPOINT);
     loginFilter.setAuthenticationManager(authenticationManager);
     loginFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
     loginFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
@@ -87,13 +81,12 @@ public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
 
   @Bean
   public RememberMeServices rememberMeServices(
-      UserDetailsService userDetailsService, PersistentTokenRepository persistentTokenRepository,
-      LoginRequestManager loginRequestManager) {
+      UserDetailsService userDetailsService, PersistentTokenRepository persistentTokenRepository) {
 
     String secretKey = getRememberMeTokenSecretKey().orElseThrow(IllegalStateException::new);
 
     return new PersistentJwtTokenBasedRememberMeServices(
-        secretKey, userDetailsService, persistentTokenRepository, loginRequestManager);
+        secretKey, userDetailsService, persistentTokenRepository);
   }
 
   @Override

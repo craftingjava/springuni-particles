@@ -1,5 +1,6 @@
 package com.springuni.auth.security;
 
+import static com.springuni.auth.security.LoginFilter.REMEMBER_ME_ATTRIBUTE;
 import static io.jsonwebtoken.SignatureAlgorithm.HS512;
 import static java.lang.System.currentTimeMillis;
 
@@ -9,6 +10,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import java.util.Date;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -29,14 +31,11 @@ public class PersistentJwtTokenBasedRememberMeServices extends
 
   public static final int DEFAULT_TOKEN_LENGTH = 16;
 
-  private final LoginRequestManager loginRequestManager;
-
   public PersistentJwtTokenBasedRememberMeServices(
       String key, UserDetailsService userDetailsService,
-      PersistentTokenRepository tokenRepository, LoginRequestManager loginRequestManager) {
+      PersistentTokenRepository tokenRepository) {
 
     super(key, userDetailsService, tokenRepository);
-    this.loginRequestManager = loginRequestManager;
   }
 
   @Override
@@ -83,10 +82,7 @@ public class PersistentJwtTokenBasedRememberMeServices extends
 
   @Override
   protected boolean rememberMeRequested(HttpServletRequest request, String parameter) {
-    return loginRequestManager
-        .getLoginRequest(request)
-        .map(LoginRequest::isRememberMe)
-        .orElse(false);
+    return Optional.ofNullable((Boolean)request.getAttribute(REMEMBER_ME_ATTRIBUTE)).orElse(false);
   }
 
 }
