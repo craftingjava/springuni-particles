@@ -86,6 +86,8 @@ public class SecurityConfigurationSupport
 
     JwtTokenService jwtTokenService = lookup("jwtTokenService");
 
+    // JwtAuthenticationFilter must precede LogoutFilter, otherwise LogoutHandler wouldn't know who
+    // logs out.
     customizeFilters(
         http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenService), LogoutFilter.class));
 
