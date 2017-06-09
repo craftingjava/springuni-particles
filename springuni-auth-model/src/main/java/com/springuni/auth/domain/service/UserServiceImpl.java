@@ -32,8 +32,7 @@ import static com.springuni.auth.domain.model.userevent.UserEventType.SIGNIN_FAI
 import static com.springuni.auth.domain.model.userevent.UserEventType.SIGNIN_SUCCEEDED;
 import static com.springuni.auth.domain.model.userevent.UserEventType.SIGNUP_REQUESTED;
 
-import com.springuni.auth.crypto.PasswordChecker;
-import com.springuni.auth.crypto.PasswordEncryptor;
+import com.springuni.auth.crypto.PasswordSecurity;
 import com.springuni.auth.domain.model.user.ConfirmationToken;
 import com.springuni.auth.domain.model.user.Password;
 import com.springuni.auth.domain.model.user.User;
@@ -62,27 +61,26 @@ public class UserServiceImpl implements UserService {
 
   private static final int NEXT_SCREEN_NAME_MAX_TRIES = 20;
 
-  private final PasswordChecker passwordChecker;
-  private final PasswordEncryptor passwordEncryptor;
-
+  private final PasswordSecurity passwordSecurity;
   private final UserEventEmitter userEventEmitter;
   private final UserRepository userRepository;
 
   /**
    * Creates an instance of {@link UserServiceImpl}, injecting its dependencies.
    *
-   * @param passwordChecker a concrete implementation of {@link PasswordChecker}
-   * @param passwordEncryptor a concrete implementation of {@link PasswordEncryptor}
+   * @param passwordSecurity a concrete implementation of {@link PasswordSecurity}
    * @param userEventEmitter a concrete implementation of {@link UserEventEmitter}
    * @param userRepository a concrete implementation of {@link UserRepository}
    */
   public UserServiceImpl(
-      PasswordChecker passwordChecker, PasswordEncryptor passwordEncryptor,
-      UserEventEmitter userEventEmitter, UserRepository userRepository) {
+      PasswordSecurity passwordSecurity, UserEventEmitter userEventEmitter,
+      UserRepository userRepository) {
 
-    // TODO: null check.
-    this.passwordChecker = passwordChecker;
-    this.passwordEncryptor = passwordEncryptor;
+    Objects.requireNonNull(passwordSecurity);
+    Objects.requireNonNull(userEventEmitter);
+    Objects.requireNonNull(userRepository);
+
+    this.passwordSecurity = passwordSecurity;
     this.userEventEmitter = userEventEmitter;
     this.userRepository = userRepository;
   }
@@ -114,7 +112,7 @@ public class UserServiceImpl implements UserService {
     Objects.requireNonNull(rawPassword, "rawPassword");
 
     User user = getUser(userId);
-    Password newPassword = passwordEncryptor.ecrypt(rawPassword);
+    Password newPassword = passwordSecurity.ecrypt(rawPassword);
     user.setPassword(newPassword);
     user = store(user);
 
@@ -249,7 +247,7 @@ public class UserServiceImpl implements UserService {
       throw new UnconfirmedUserException();
     }
 
-    if (passwordChecker.check(user.getPassword(), rawPassword)) {
+    if (passwordSecurity.check(user.getPassword(), rawPassword)) {
       // TODO: invalid all password reset tokens.
       userEventEmitter.emit(new UserEvent(user.getId(), SIGNIN_SUCCEEDED));
       return user;
@@ -336,7 +334,7 @@ public class UserServiceImpl implements UserService {
       throw new ScreenNameIsAlreadyTakenException();
     }
 
-    Password password = passwordEncryptor.ecrypt(rawPassword);
+    Password password = passwordSecurity.ecrypt(rawPassword);
     user.setPassword(password);
     user = store(user);
 

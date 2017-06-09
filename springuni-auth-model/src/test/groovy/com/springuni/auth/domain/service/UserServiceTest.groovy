@@ -1,7 +1,6 @@
 package com.springuni.auth.domain.service
 
-import com.springuni.auth.crypto.PasswordChecker
-import com.springuni.auth.crypto.PasswordEncryptor
+import com.springuni.auth.crypto.PasswordSecurity
 import com.springuni.auth.domain.model.user.ConfirmationToken
 import com.springuni.auth.domain.model.user.Password
 import com.springuni.auth.domain.model.user.User
@@ -34,8 +33,7 @@ class UserServiceTest extends BaseServiceTest {
   static final NON_EXISTENT_USER_EMAIL = "non-existent@springuni.com"
   static final NON_EXISTENT_USER_SCREEN_NAME = "non-existent"
 
-  @Mock PasswordChecker passwordChecker
-  @Mock PasswordEncryptor passwordEncryptor
+  @Mock PasswordSecurity passwordSecurity
   @Mock UserRepository userRepository
 
   ConfirmationToken validEmailConfirmationToken
@@ -57,8 +55,7 @@ class UserServiceTest extends BaseServiceTest {
     invalidEmailConfirmationToken = user2.addConfirmationToken(EMAIL).use()
     invalidPasswordResetConfirmationToken = user2.addConfirmationToken(PASSWORD_RESET).use()
 
-    userService = new UserServiceImpl(
-        passwordChecker, passwordEncryptor, userEventEmitter, userRepository)
+    userService = new UserServiceImpl(passwordSecurity, userEventEmitter, userRepository)
 
     when(userRepository.findById(user1.id)).thenReturn(Optional.of(user1))
     when(userRepository.findByScreenName(user1.screenName)).thenReturn(Optional.of(user1))
@@ -93,13 +90,13 @@ class UserServiceTest extends BaseServiceTest {
   @Test
   void testChangePassword() {
     ArgumentCaptor<String> rawPasswordCaptor = ArgumentCaptor.forClass(String)
-    when(passwordEncryptor.ecrypt(rawPasswordCaptor.capture())).thenReturn(new Password("test", "test"))
+    when(passwordSecurity.ecrypt(rawPasswordCaptor.capture())).thenReturn(new Password("test", "test"))
 
     User changedUser = userService.changePassword(user1.id, "somepassword")
     assertNotNull(changedUser)
     assertNotNull(changedUser.password)
 
-    verify(passwordEncryptor).ecrypt("somepassword")
+    verify(passwordSecurity).ecrypt("somepassword")
 
     assertEmittedUserEvent(PASSWORD_CHANGED)
   }
@@ -217,7 +214,7 @@ class UserServiceTest extends BaseServiceTest {
 
   @Test
   void testLogin() {
-    when(passwordChecker.check(isNull(), anyString())).thenReturn(true)
+    when(passwordSecurity.check(isNull(), anyString())).thenReturn(true)
     user1.confirmed = true
     userService.login(user1.email, "valid")
 
@@ -226,7 +223,7 @@ class UserServiceTest extends BaseServiceTest {
 
   void testLogin_withBadPassword() {
     user1.confirmed = true
-    when(passwordChecker.check(any(Password), anyString())).thenReturn(false)
+    when(passwordSecurity.check(any(Password), anyString())).thenReturn(false)
 
     try {
       userService.login(user1.email, "invalid")
@@ -245,7 +242,7 @@ class UserServiceTest extends BaseServiceTest {
 
   @Test(expected = UnconfirmedUserException)
   void testLogin_withUnconfirmedUser() {
-    when(passwordChecker.check(any(Password), anyString())).thenReturn(true)
+    when(passwordSecurity.check(any(Password), anyString())).thenReturn(true)
     userService.login(user1.email, "valid")
   }
 
@@ -306,7 +303,7 @@ class UserServiceTest extends BaseServiceTest {
     User user3 = new User(3L, NON_EXISTENT_USER_SCREEN_NAME, NON_EXISTENT_USER_EMAIL)
     when(userRepository.save(user3)).thenReturn(user3)
     userService.signup(user3, "test")
-    verify(passwordEncryptor).ecrypt("test")
+    verify(passwordSecurity).ecrypt("test")
     assertEmittedUserEvent(SIGNUP_REQUESTED)
   }
 

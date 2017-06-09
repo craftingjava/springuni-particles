@@ -1,9 +1,8 @@
 package com.springuni.auth.domain.service;
 
-import com.springuni.auth.crypto.PasswordChecker;
-import com.springuni.auth.crypto.PasswordEncryptor;
+import com.springuni.auth.crypto.PasswordSecurity;
+import com.springuni.auth.crypto.Pbkdf2PasswordSecurityImpl;
 import com.springuni.auth.domain.model.session.SessionRepository;
-import com.springuni.auth.domain.model.user.Password;
 import com.springuni.auth.domain.model.user.UserRepository;
 import com.springuni.auth.domain.model.userevent.UserEventEmitter;
 import org.slf4j.Logger;
@@ -27,12 +26,8 @@ public class AuthServiceConfiguration {
 
   @Bean
   public UserService userService(UserRepository userRepository, UserEventEmitter userEventEmitter) {
-    // TODO: replace these with the actual implementations
-    PasswordChecker passwordChecker = (password, rawPassword) -> true;
-    PasswordEncryptor passwordEncryptor = rawPassword -> new Password(rawPassword, "");
-
-    return new UserServiceImpl(
-        passwordChecker, passwordEncryptor, userEventEmitter, userRepository);
+    PasswordSecurity passwordSecurity = new Pbkdf2PasswordSecurityImpl();
+    return new UserServiceImpl(passwordSecurity, userEventEmitter, userRepository);
   }
 
   @Bean
