@@ -28,7 +28,7 @@ class SessionJpaRepositoryTest {
 
   @Before
   void before() {
-    session = new Session(1, 1)
+    session = new Session(1L, 1L, "123")
     sessionRepository.save(session)
   }
 
