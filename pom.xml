@@ -53,7 +53,6 @@
     <build-helper-maven-plugin.version>1.8</build-helper-maven-plugin.version>
     <checkstyle.version>7.6.1</checkstyle.version>
     <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
-    <gmavenplus-plugin.version>1.5</gmavenplus-plugin.version>
     <groovy.eclipse.compiler.version>2.9.2-01</groovy.eclipse.compiler.version>
     <groovy.eclipse.batch.version>2.4.3-01</groovy.eclipse.batch.version>
     <groovy.version>2.4.3</groovy.version>
@@ -85,25 +84,6 @@
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.codehaus.gmavenplus</groupId>
-        <artifactId>gmavenplus-plugin</artifactId>
-        <version>${gmavenplus-plugin.version}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>addSources</goal>
-              <goal>addTestSources</goal>
-              <goal>generateStubs</goal>
-              <goal>compile</goal>
-              <goal>testGenerateStubs</goal>
-              <goal>testCompile</goal>
-              <goal>removeStubs</goal>
-              <goal>removeTestStubs</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${maven-compiler-plugin.version}</version>
