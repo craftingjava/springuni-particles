@@ -1,5 +1,8 @@
 package com.springuni.auth.security;
 
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springuni.auth.domain.service.SessionService;
 import com.springuni.auth.domain.service.UserService;
@@ -124,7 +127,10 @@ public class AuthSecurityConfiguration extends SecurityConfigurationSupport {
 
   @Override
   protected void customizeRequestAuthorization(HttpSecurity http) throws Exception {
-    http.authorizeRequests().antMatchers(HttpMethod.POST, "/users").permitAll();
+    http.authorizeRequests()
+        .antMatchers(POST, "/users").permitAll()
+        .regexMatchers(PUT, "/users/.*/confirm_email/.*").permitAll()
+        .regexMatchers(PUT, "/users/.*/confirm_password_reset/.*").permitAll();
   }
 
 }
