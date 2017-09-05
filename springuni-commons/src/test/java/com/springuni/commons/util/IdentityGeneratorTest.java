@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ public class IdentityGeneratorTest {
   private static final byte SHARD_ID = 126;
 
   @Test
+  @Ignore
   public void testCollision() throws Exception {
     ExecutorService executorService = Executors.newFixedThreadPool(100);
 
