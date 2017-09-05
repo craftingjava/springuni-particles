@@ -9,7 +9,34 @@
   <version>1.0-SNAPSHOT</version>
 
   <name>SpringUni Particles</name>
-  <description>Small and re-usable modules for building microservices</description>
+  <description>Small and re-usable modules for building user management microservices</description>
+  <url>https://github.com/springuni/springuni-particles/</url>
+
+  <organization>
+    <name>SpringUni</name>
+    <url>https://springuni.com/</url>
+  </organization>
+
+  <licenses>
+    <license>
+      <name>GNU Lesser General Public License</name>
+      <url>https://www.gnu.org/licenses/lgpl-3.0.en.html</url>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:git:git@github.com:springuni/springuni-particles.git</connection>
+    <url>https://github.com/springuni/springuni-particles.git</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <developers>
+    <developer>
+      <id>lcsontos</id>
+      <name>Laszlo Csontos</name>
+      <email>github at laszlocsontos.com</email>
+    </developer>
+  </developers>
 
   <modules>
     <module>springuni-commons</module>
