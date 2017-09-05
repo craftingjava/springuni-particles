@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * Created by lcsontos on 5/18/17.
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.Import;
     AuthRestConfiguration.class,
     AuthSecurityConfiguration.class
 })
+@PropertySource(name = "dev", value = "file:.env", ignoreResourceNotFound = true)
 public class Application {
 
   public static void main(String[] args) throws Exception {
