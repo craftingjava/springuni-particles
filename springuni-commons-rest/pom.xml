@@ -13,7 +13,7 @@
 
   <artifactId>springuni-commons-rest</artifactId>
 
-  <name>SpringUni Commons JPA</name>
+  <name>SpringUni Commons REST</name>
   <description>Commons utilities for supporting REST controller modules</description>
 
   <dependencies>
