@@ -8,7 +8,18 @@ hs_err_pid*
 
 # Ignore IntelliJ IDEA project files
 .idea
+*.iws
 *.iml
+*.ipr
+
+# Ignore Eclepse or STS project files
+.project
+.classpath
+.wtpmodules
+.settings
+.apt_generated
+.factorypath
+.springBeans
 
 # Ignore compiled assemblies
 target
